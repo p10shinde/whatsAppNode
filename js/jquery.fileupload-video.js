@@ -90,7 +90,7 @@
                     if (url) {
                         video = this._videoElement.cloneNode(false);
                         video.src = url;
-                        video.controls = true;
+                        video.controls = false;
                         data.video = video;
                         return data;
                     }

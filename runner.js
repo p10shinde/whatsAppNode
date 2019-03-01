@@ -22,7 +22,7 @@ projectDB.on('error', console.error.bind(console, 'error connecting with mongodb
 projectDB.once('open', function() {  console.log('connected to mongodb (project) database'); });    
 projectDB.on('disconnected', function () {
    //Reconnect on timeout
-   console.log('Reconnecting to mongodb (project) database');  mongoose.connect(projectURI, OPTIONS);
+   console.log('Reconnecting to mongodb (project) database');  mongoose.connect(wappURI, OPTIONS);
    projectDB = mongoose.connection;  console.log('Reconnected to mongodb (project) database');
 });
 
@@ -76,6 +76,8 @@ global.imageurl = path.join(global.dir,'i');
 global.videourl = path.join(global.dir,'v');
 global.allowedExtensions = {
 	image : /(\.jpg|\.jpeg|\.png|\.gif)$/i,
+	video : /(\.mp4|\.3gp|\.avi)$/i,
+	audio : /(\.ogg|\.wav|\.mp3)$/i,
 	ms : /(\.docx|\.xlsx|\.pptx|\.doc|\.xls|\.ppt)$/i,
 	msfd : /(\.doc|\.docx)$/i,
 	msfx : /(\.xls|\.xlsx)$/i,
@@ -110,6 +112,10 @@ var storage	=	multer.diskStorage({
   	var basicUrl = 'http://localhost:4001/api';
   	if(global.allowedExtensions.image.exec(file.originalname)){
 	    callback(null, './data/i');
+  	}else if(global.allowedExtensions.video.exec(file.originalname)){
+	    callback(null, './data/v');
+  	}else if(global.allowedExtensions.audio.exec(file.originalname)){
+	    callback(null, './data/a');
   	}else if(global.allowedExtensions.ms.exec(file.originalname)){
 	    callback(null, './data/d');
   	}else{
@@ -142,15 +148,41 @@ router.get('/serve', servefiles);
 router.get('/getc', getc);
 router.put('/putc', putc);
 router.delete('/delc', delc);
-router.post('/photo',upload.array('files[]',10) , async function(req,res){
-	
-	if (req.files.length!=0) {
+
+router.get('/getimages', function(req, res){
+	var files = { files : [] }
+	var basicUrl = 'http://localhost:4001/api';
+	try{
+		fs.readdirSync(global.imageDir).forEach(file => {
+			var thumbnailUrl = basicUrl+'/serve?res=i/'+file;
+		   files.files.push({
+			  	name:file,
+			  	size:file.size,
+				type:'image',
+				url:thumbnailUrl,
+				thumbnailUrl : thumbnailUrl,
+				deleteUrl: thumbnailUrl,
+				deleteType:'DELETE'
+			})
+		});
+		// const stats = fs.statSync(global.imageDir+'/test.jpg')
+		res.json(files);
+	}catch(E_){
+		console.log(E_)
+		res.json('Error')
+	}
+});
+
+
+router.post('/photo',upload.single('files[]') , async function(req,res){
+	global.uploadedFiles.files=[];
+	if (req.file) {
         var basicUrl = 'http://localhost:4001/api';
-        var file = req.files[0];
-        console.log(file);
+        var file = req.file;
 	  	if(global.allowedExtensions.image.exec(file.originalname)){
 		    var thumbnailUrl = basicUrl+'/serve?res=i/'+file.originalname;
 		  	 global.uploadedFiles.files.push({name:file.originalname,size:file.size,
+		  	 					type:'image',
 		  	 					url:thumbnailUrl,
 		  	 					thumbnailUrl : thumbnailUrl,
 		  	 					deleteUrl: thumbnailUrl,
@@ -158,6 +190,23 @@ router.post('/photo',upload.array('files[]',10) , async function(req,res){
 	  	}else if(global.allowedExtensions.ms.exec(file.originalname)){
 		    var thumbnailUrl = basicUrl+'/serve?res=refer/'+global.allowedExtensions.ms.exec(file.originalname)[0]+'.png';
 		  	 global.uploadedFiles.files.push({name:file.originalname,size:file.size,
+		  	 					type:'ms',
+		  	 					url:thumbnailUrl,
+		  	 					thumbnailUrl : thumbnailUrl,
+		  	 					deleteUrl: basicUrl+'/serve/'+file.originalname,
+		  	 					deleteType:'DELETE'})
+	  	}else if(global.allowedExtensions.video.exec(file.originalname)){
+		    var thumbnailUrl = basicUrl+'/serve?res=v/'+file.originalname;
+		  	 global.uploadedFiles.files.push({name:file.originalname,size:file.size,
+		  	 					type:'video',
+		  	 					url:thumbnailUrl,
+		  	 					thumbnailUrl : thumbnailUrl,
+		  	 					deleteUrl: basicUrl+'/serve/'+file.originalname,
+		  	 					deleteType:'DELETE'})
+	  	}else if(global.allowedExtensions.audio.exec(file.originalname)){
+		    var thumbnailUrl = basicUrl+'/serve?res=refer/'+global.allowedExtensions.audio.exec(file.originalname)[0]+'.png';
+		  	 global.uploadedFiles.files.push({name:file.originalname,size:file.size,
+		  	 					type:'audio',
 		  	 					url:thumbnailUrl,
 		  	 					thumbnailUrl : thumbnailUrl,
 		  	 					deleteUrl: basicUrl+'/serve/'+file.originalname,
@@ -166,12 +215,12 @@ router.post('/photo',upload.array('files[]',10) , async function(req,res){
 		    console.log('junk')
 		    var thumbnailUrl = basicUrl+'/serve?res=refer/unknown.png';
 		  	 global.uploadedFiles.files.push({name:file.originalname,size:file.size,
+		  	 					type:'junk',
 		  	 					url:thumbnailUrl,
 		  	 					thumbnailUrl : thumbnailUrl,
-		  	 					deleteUrl: basicUrl+'/serve/'+file.originalname,
+		  	 					deleteUrl: thumbnailUrl,
 		  	 					deleteType:'DELETE'})
 	  	}
-
         await res.json(global.uploadedFiles)
     } else {
         console.log('No File Uploaded');

@@ -143,6 +143,13 @@ window.onload = function(){
     $('.imageTypeDiv').on('click','.imgHolder .addCaption', global.imgHolderAddCaption);
     $('#imgCaptionEditorSave').on('click', global.imgCaptionEditorSave);
 
+    $('.panelToggleButton').on('click', global.panelToggleButton);
+
+    
+    $('.gridImages').on('click', '.resHolder div.hov', global.images.imageClick);
+    $('.gridImages').on('mouseover', '.resHolder', global.images.mouseover);
+    $('.gridImages').on('mouseout', '.resHolder', global.images.mouseout);
+
     $('.messageEditorModal').on('show.bs.modal', function() {
         $("#contactName").val("");
         $("#contactNumber").val("");
@@ -178,6 +185,22 @@ function declareFunctions(){
         $(".progress").css('visibility','hidden');
     });
 
+    global.panelToggleButton = function(event){
+
+        if($(this).text() == 'Upload'){
+            $(this).text('Browse')
+            $('.uploaderFrame').show();
+            $('#accordionExample').hide();
+            
+
+        }else if($(this).text() == 'Browse'){
+            $(this).text('Upload')
+            $('.uploaderFrame').hide();
+            $('#accordionExample').show();
+        }
+    };
+    
+
     global.confirmMessageModal = function(event){
         if(!confirm('Are you sure?')) return false;
              $('.messageEditorModal').modal('hide');
@@ -211,6 +234,11 @@ function declareFunctions(){
         $(".manageResourcesPanel").show();
         $(".manageContactPanel").hide();
         $(".sendMessagesPanel").hide();
+        if($('.gridImages div').length == 0){
+            global.images.getImages(function(data){
+                global.images.renderImages(data)
+            });
+        }
         
     }
 
@@ -683,6 +711,48 @@ function declareFunctions(){
     })
    }
 
+   global.images = {
+        getImages : function(cb){
+            $.ajax({
+             url : `${global.apiurl}getimages`,
+             async : true,
+             dataType : 'json',
+             complete : function(jqXHR, status){
+                if(status == "success"){
+                    global.images.latestImages = jqXHR.responseJSON.files;
+                    cb(jqXHR.responseJSON.files)
+                }else if(status == "error"){
+                    cb([])
+                    $.notify(JSON.stringify(jqXHR.responseJSON),'error')
+                }
+             }
+             })
+        },
+        renderImages : function(data){
+            $('.gridImages').empty();
+            $.each(data, function(k,img){
+                $('.gridImages').append(`<div class="resHolder"><img src="${img.thumbnailUrl}"/><div class='hov'></div></div>`);
+            })
+
+        },
+        imageClick : function(event){
+            var gallery = blueimp.Gallery(_.pluck(global.images.latestImages,'url'));
+            
+            gallery.slide(index, 1);
+        },
+        latestImages : [],
+        mouseover : function(event){
+            // $('div.resHolder div.hov').fadeOut(1);
+            $(this).find('div.hov').fadeIn();
+            // setTimeout(function(){
+            //     $('div.resHolder div.hov').fadeOut(1);
+            // },2000)
+        },
+        mouseout : function(event){
+            $(this).find('div.hov').fadeOut(1);
+        }
+    }
+
 }
 
 /*##############HELPERS######################*/
@@ -941,6 +1011,8 @@ global.parseMessage = function(quillObj){
   replace(/(?=(?:[^```]*```[^```]*```)*[^```]*$)```/g, "<tt>").replace(/```/g,"</tt>");
   return {text:finalText,delta:JSON.stringify(data)};
 }
+
+
 
 $.contextMenu({
     selector: '#manageContactsDataTable', 

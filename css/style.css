@@ -14,7 +14,45 @@ body {
   padding-top: 0px;
 }
 
+.row{
+   margin: 0 !important;
+}
+
+.fileupload-buttonbar{
+   position: fixed;
+   width: 100%;
+   z-index: 1;
+}
+.fileupload-buttonbar div.buttonbar{
+   background: white
+}
+
+table.uploadTable{
+   position: relative;
+   top: 100px;
+}
+
+
 /*blueimp-upload*/
-table tbody.files td span.preview a img{
-  width: 80px !important;
+table.uploadTable tbody.files td span.preview a img,
+table.uploadTable tbody.files td span.preview img,
+table.uploadTable tbody.files td span.preview video,
+table.uploadTable tbody.files td span.preview audio{
+  width: 44px !important;
+}
+
+table.uploadTable tbody.files tr canvas{
+   width: 44px !important;
+}
+table.uploadTable tbody.files td{
+   padding-bottom: 0;
+}
+table.uploadTable tbody.files td:nth-child(1){
+   width: 44px !important;
+}
+table.uploadTable tbody.files td:nth-child(3){
+   width: 100px !important;
+}
+table.uploadTable tbody.files td:nth-child(4){
+   width: 1px;
 }

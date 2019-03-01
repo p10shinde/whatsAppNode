@@ -36,14 +36,14 @@
 </head>
 <body>
 
-<div class="container">
+<div class="">
     <!-- The file upload form used as target for the file upload widget -->
     <form id="fileupload" action="http://localhost:4001/api/photo" method="POST" enctype="multipart/form-data">
         <!-- Redirect browsers with JavaScript disabled to the origin page -->
         <noscript><input type="hidden" name="redirect" value="https://blueimp.github.io/jQuery-File-Upload/"></noscript>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="row fileupload-buttonbar">
-            <div class="col-lg-7">
+            <div class="col-lg-7 buttonbar">
                 <!-- The fileinput-button span is used to style the file input field as button -->
                 <span class="btn btn-success fileinput-button">
                     <i class="glyphicon glyphicon-plus"></i>
@@ -81,7 +81,7 @@
             </div>
         </div>
         <!-- The table listing the files available for upload/download -->
-        <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+        <table role="presentation" class="table table-striped uploadTable"><tbody class="files"></tbody></table>
     </form>
     <br>
 </div>
@@ -133,15 +133,20 @@
     <tr class="template-download fade">
         <td>
             <span class="preview">
-                {% if (file.thumbnailUrl) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+                {% if (file.type=='image') { %}
+                    <img src="{%=file.thumbnailUrl%}">
+                {% } else if (file.type=='video') { %}
+                    <video title="{%=file.name%}" download="{%=file.name%}"  src="{%=file.thumbnailUrl%}"></video>
+                {% } else { %}
+                    <img src="{%=file.thumbnailUrl%}">
                 {% } %}
+                
             </span>
         </td>
         <td>
             <p class="name">
                 {% if (file.url) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+                    {%=file.name%}
                 {% } else { %}
                     <span>{%=file.name%}</span>
                 {% } %}

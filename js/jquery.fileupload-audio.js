@@ -66,6 +66,7 @@
         },
 
         _audioElement: document.createElement('audio'),
+        _imageElement: document.createElement('img'),
 
         processActions: {
 
@@ -79,19 +80,25 @@
                 }
                 var file = data.files[data.index],
                     url,
-                    audio;
+                    urlImage,
+                    audio,
+                    image;
                 if (this._audioElement.canPlayType &&
                         this._audioElement.canPlayType(file.type) &&
                         ($.type(options.maxFileSize) !== 'number' ||
                             file.size <= options.maxFileSize) &&
                         (!options.fileTypes ||
                             options.fileTypes.test(file.type))) {
-                    url = loadImage.createObjectURL(file);
+                    url = '../data/refer/audio.png';
+                    urlImage = loadImage.createObjectURL(file);
                     if (url) {
+                        image = this._imageElement.cloneNode(false);
                         audio = this._audioElement.cloneNode(false);
-                        audio.src = url;
-                        audio.controls = true;
+                        image.src = url;
+                        audio.src = urlImage;
+                        audio.controls = false;
                         data.audio = audio;
+                        data.image = image;
                         return data;
                     }
                 }
@@ -100,8 +107,9 @@
 
             // Sets the audio element as a property of the file object:
             setAudio: function (data, options) {
-                if (data.audio && !options.disabled) {
+                if (data.audio && !options.disabled && data.image) {
                     data.files[data.index][options.name || 'preview'] = data.audio;
+                    data.files[data.index][options.name || 'preview2'] = data.image;
                 }
                 return data;
             }
