@@ -1,0 +1,16 @@
+[{
+   "base" : "",
+   "name" : "",
+   "m_Message" : "FILE.PNG##||##MESSAGE##||##",
+   "m_Delta" : "FILE.PNG##||##MESSAGE##||##"
+
+},{
+   "base" : "",
+   "name" : "",
+   "m_Message" : "",
+   "m_Delta" : "",
+}]
+
+
+FILE.PNG##||#####|||###FILE.PNG##||##MESSAGE
+

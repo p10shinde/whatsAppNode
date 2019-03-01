@@ -1,0 +1,284 @@
+/* 1 */
+{
+    "_id" : ObjectId("5c7432c461b7a020f0ef3291"),
+    "stepNo" : 2,
+    "stepCheckBox" : "<input type=\"checkbox\" class=\"c_select\" />",
+    "contactName" : "Yeshwanth",
+    "contactNumber" : "8800590888",
+    "message" : [ 
+        {
+            "type" : "text",
+            "data" : [ 
+                {
+                    "id" : 1,
+                    "text" : "<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike> \r\n\r\n<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERTHELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike> \r\n<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike> \r\n<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike> \r\n<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike> \r\n<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike> \r\n<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERTHELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike> \r\n<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike>",
+                    "url" : "",
+                    "fName" : "",
+                    "delta" : "[{\"attributes\":{\"strike\":true,\"italic\":true,\"font\":\"serif\",\"bold\":true},\"insert\":\"HELLO \"},{\"attributes\":{\"font\":\"serif\"},\"insert\":\" \"},{\"insert\":\"{#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"font\":\"serif\",\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\\n\"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"HELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERTHELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"HELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"HELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"HELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"HELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"HELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERTHELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"HELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"}]"
+                }
+            ]
+        }, 
+        {
+            "type" : "text",
+            "data" : [ 
+                {
+                    "id" : 2,
+                    "text" : "<strike><i><b>HELLO</b></i></strike>  <b>{#name#}</b>  <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike>",
+                    "delta" : "[{\"attributes\":{\"strike\":true,\"italic\":true,\"font\":\"serif\",\"bold\":true},\"insert\":\"HELLO \"},{\"attributes\":{\"font\":\"serif\"},\"insert\":\" \"},{\"attributes\":{\"bold\":true},\"insert\":\"{#name#}\"},{\"insert\":\" \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"font\":\"serif\",\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"}]",
+                    "url" : "",
+                    "fName" : ""
+                }
+            ]
+        }
+    ],
+    "__v" : 0
+}
+
+/* 2 */
+{
+    "_id" : ObjectId("5c7432c461b7a020f0ef3292"),
+    "stepNo" : 7,
+    "stepCheckBox" : "<input type=\"checkbox\" class=\"c_select\" />",
+    "contactName" : "new",
+    "contactNumber" : "9364278364",
+    "message" : [ 
+        {
+            "type" : "text",
+            "data" : [ 
+                {
+                    "id" : 1,
+                    "text" : "<b>sdhiwhfowefwefwww {#name#}</b>",
+                    "delta" : "[{\"attributes\":{\"bold\":true},\"insert\":\"sdhiwhfowefwefwww {#name#}\"},{\"insert\":\"\\n\"}]",
+                    "url" : "",
+                    "fName" : ""
+                }
+            ]
+        }
+    ],
+    "__v" : 0
+}
+
+/* 3 */
+{
+    "_id" : ObjectId("5c7432c461b7a020f0ef3293"),
+    "stepNo" : 1,
+    "stepCheckBox" : "<input type=\"checkbox\" class=\"c_select\" />",
+    "contactName" : "PAnkajh",
+    "contactNumber" : "8800669070",
+    "message" : [ 
+        {
+            "type" : "text",
+            "data" : [ 
+                {
+                    "id" : 1,
+                    "text" : "<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike> \r\n\r\n<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERTHELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike> \r\n<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike> \r\n<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike> \r\n<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike> \r\n<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike> \r\n<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERTHELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike> \r\n<strike><i><b>HELLO</b></i></strike>  {#name#} <strike><i><b>THIS IS NEW EMERGENCY ALERT</b></i></strike>",
+                    "url" : "",
+                    "fName" : "",
+                    "delta" : "[{\"attributes\":{\"strike\":true,\"italic\":true,\"font\":\"serif\",\"bold\":true},\"insert\":\"HELLO \"},{\"attributes\":{\"font\":\"serif\"},\"insert\":\" \"},{\"insert\":\"{#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"font\":\"serif\",\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\\n\"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"HELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERTHELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"HELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"HELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"HELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"HELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"HELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERTHELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"HELLO \"},{\"insert\":\" {#name#} \"},{\"attributes\":{\"strike\":true,\"italic\":true,\"bold\":true},\"insert\":\"THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"}]"
+                }
+            ]
+        }, 
+        {
+            "type" : "text",
+            "data" : [ 
+                {
+                    "id" : 2,
+                    "text" : "test.png##||##<strike><i><b>HELLO THIS IS NEW EMERGENCY ALERT</b></i></strike>###|||###test2.png##||##<strike><i><b>HELLO THIS IS NEW EMERGENCY ALERT</b></i></strike>",
+                    "url" : "",
+                    "fName" : "",
+                    "delta" : "[{\"attributes\":{\"strike\":true,\"italic\":true,\"font\":\"serif\",\"bold\":true},\"insert\":\"HELLO THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"}]###|||###[{\"attributes\":{\"strike\":true,\"italic\":true,\"font\":\"serif\",\"bold\":true},\"insert\":\"HELLO THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"}]"
+                }
+            ]
+        }, 
+        {
+            "type" : "text",
+            "data" : [ 
+                {
+                    "id" : 3,
+                    "text" : "Hello <b>{#name#}</b> , What are you doing",
+                    "delta" : "[{\"insert\":\"Hello \"},{\"attributes\":{\"bold\":true},\"insert\":\"{#name#}\"},{\"insert\":\", What are you doing\\n\"}]",
+                    "url" : "",
+                    "fName" : ""
+                }
+            ]
+        }, 
+        {
+            "type" : "text",
+            "data" : [ 
+                {
+                    "id" : 4,
+                    "text" : "<strike><i><b>HELLO THIS IS NEW EMERGENCY ALERT</b></i></strike>",
+                    "delta" : "[{\"attributes\":{\"strike\":true,\"italic\":true,\"font\":\"serif\",\"bold\":true},\"insert\":\"HELLO THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"}]",
+                    "url" : "",
+                    "fName" : ""
+                }
+            ]
+        }, 
+        {
+            "type" : "text",
+            "data" : [ 
+                {
+                    "id" : 5,
+                    "text" : "<b>Hello</b>  {#name#} this is <i>new</i> \r\ntext thanks <tt>cool</tt> {#name#}",
+                    "delta" : "[{\"attributes\":{\"bold\":true},\"insert\":\"Hello\"},{\"insert\":\" {#name#} this is \"},{\"attributes\":{\"italic\":true},\"insert\":\"new \"},{\"insert\":\"\\ntext thanks \"},{\"attributes\":{\"font\":\"monospace\"},\"insert\":\"cool \"},{\"insert\":\"{#name#}\\n\"}]",
+                    "url" : "",
+                    "fName" : ""
+                }
+            ]
+        }
+    ],
+    "__v" : 0
+}
+
+/* 4 */
+{
+    "_id" : ObjectId("5c7432c461b7a020f0ef3294"),
+    "stepNo" : 4,
+    "stepCheckBox" : "<input type=\"checkbox\" class=\"c_select\" />",
+    "contactName" : "My User",
+    "contactNumber" : "1234232345",
+    "message" : [ 
+        {
+            "type" : "text",
+            "data" : [ 
+                {
+                    "id" : 1,
+                    "text" : "Hellllooo",
+                    "delta" : "[{\"insert\":\"Hellllooo\\n\"}]",
+                    "url" : "",
+                    "fName" : ""
+                }
+            ]
+        }
+    ],
+    "__v" : 0
+}
+
+/* 5 */
+{
+    "_id" : ObjectId("5c7432c461b7a020f0ef3295"),
+    "stepNo" : 6,
+    "stepCheckBox" : "<input type=\"checkbox\" class=\"c_select\" />",
+    "contactName" : "__BLANK__",
+    "contactNumber" : "6345656656",
+    "message" : [ 
+        {
+            "type" : "text",
+            "data" : [ 
+                {
+                    "id" : 1,
+                    "text" : "test message2",
+                    "delta" : "[{\"insert\":\"test message2\\n\"}]",
+                    "url" : "",
+                    "fName" : ""
+                }
+            ]
+        }
+    ],
+    "__v" : 0
+}
+
+/* 6 */
+{
+    "_id" : ObjectId("5c751d97885485e1d8159466"),
+    "stepNo" : 3,
+    "stepCheckBox" : "<input type=\"checkbox\" class=\"c_select\" />",
+    "contactName" : "__BLANK__",
+    "contactNumber" : "9599171934",
+    "message" : [ 
+        {
+            "type" : "text",
+            "data" : [ 
+                {
+                    "id" : 1,
+                    "text" : "Testing {#name#}",
+                    "delta" : "[{\"insert\":\"Testing {#name#}\\n\"}]",
+                    "url" : "",
+                    "fName" : ""
+                }
+            ]
+        }, 
+        {
+            "type" : "text",
+            "data" : [ 
+                {
+                    "id" : 2,
+                    "text" : "<strike><i><b>HELLO THIS IS NEW EMERGENCY ALERT</b></i></strike>",
+                    "delta" : "[{\"attributes\":{\"strike\":true,\"italic\":true,\"font\":\"serif\",\"bold\":true},\"insert\":\"HELLO THIS IS NEW EMERGENCY ALERT\"},{\"insert\":\"\\n\"}]",
+                    "url" : "",
+                    "fName" : ""
+                }
+            ]
+        }
+    ]
+}
+
+/* 7 */
+{
+    "_id" : ObjectId("5c751dc0885485e1d8159467"),
+    "stepNo" : 5,
+    "stepCheckBox" : "<input type=\"checkbox\" class=\"c_select\" />",
+    "contactName" : "__BLANK__",
+    "contactNumber" : "3246345645",
+    "message" : [ 
+        {
+            "type" : "text",
+            "data" : [ 
+                {
+                    "id" : 1,
+                    "text" : "test message",
+                    "delta" : "[{\"insert\":\"test message\\n\"}]",
+                    "url" : "",
+                    "fName" : ""
+                }
+            ]
+        }
+    ]
+}
+
+/* 8 */
+{
+    "_id" : ObjectId("5c7532b2a1f0056bb7b87552"),
+    "stepNo" : 8,
+    "stepCheckBox" : "<input type=\"checkbox\" class=\"c_select\" />",
+    "contactName" : "__BLANK__",
+    "contactNumber" : "2222222222",
+    "message" : [ 
+        {
+            "type" : "image",
+            "id" : 1,
+            "data" : [ 
+                {
+                    "text" : "test message",
+                    "delta" : "[{\"insert\":\"test message\\n\"}]",
+                    "url" : "http://localhost:4001/api/serve/test.png",
+                    "fName" : "test.png"
+                }, 
+                {
+                    "text" : "test2 message",
+                    "delta" : "[{\"insert\":\"test2 message\\n\"}]",
+                    "url" : "http://localhost:4001/api/serve/test.png",
+                    "fName" : "test2.png"
+                }
+            ]
+        }, 
+        {
+            "type" : "image",
+            "id" : 2,
+            "data" : [ 
+                {
+                    "text" : "test3 message",
+                    "delta" : "[{\"insert\":\"test3 message\\n\"}]",
+                    "url" : "http://localhost:4001/api/serve/test3.png",
+                    "fName" : "test3.png"
+                }, 
+                {
+                    "text" : "test4 message",
+                    "delta" : "[{\"insert\":\"test4 message\\n\"}]",
+                    "url" : "http://localhost:4001/api/serve/test4.png",
+                    "fName" : "test4.png"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html dir="LTR" loc="en" lang="en" style="height: 100%">
+  <head>
+    <!-- Required meta tags -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width">
+	<meta name="google" content="notranslate">
+  <script type="text/javascript">if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+	<link rel="stylesheet" href="index.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <!-- BOOTSTRAP4 DATATABLE -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.2.5/css/rowReorder.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/scroller/1.5.0/css/scroller.bootstrap4.min.css">
+
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- FONTAWESOME -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <!-- CONTEXTMENU -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.8.0/jquery.contextMenu.css" integrity="sha256-5jYFrHUEuWbohGWBsZrs+KB0KdlThA22vmG3ublULH8=" crossorigin="anonymous" />
+
+    <!-- QUILL -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+
+    <title>WhatsAppmated</title>
+  </head>
+  <div class="loadingDiv" style="background-color: white;position: absolute;top: 0;left: 0;z-index:10000;height: 100%;width: 100%">
+    <img src="loading.gif" style="display: block;margin-left: auto;margin-right: auto;">
+  </div>
+  <body class="container" style="height: 100%">
+    <!-- MODAL -->
+    <div class="modal fade messageEditorModal" tabindex="-1" data-keyboard="false" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Contact Details :</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <label for="contactName">Contact Name : </label>
+            <input id="contactName" type="text" class="form-control" name="contactName">
+            <label for="contactNumber">Contact Number : <span class="text-danger">*</span></label>
+            <input id="contactNumber" type="text" class="form-control" name="contactNumber" placeholder="1234567890" pattern="[0-9]{10}" maxlength="10">
+            <label for="messageType">Message Type : </label>
+            <select class="form-control" id="messageType">
+                <option value="text">text</option>
+                <option value="image">image</option>
+                <option value="audio">audio</option>
+                <option value="video">video</option>
+                <option value="document">document</option>
+            </select>
+            <label for="messageEditor">Message : </label>
+            <div class="textTypeDiv msgTypeDiv" style="display: none">
+              <div id="messageEditor">
+                <p>Sample</p>
+              </div>
+            </div>
+            <div class="imageTypeDiv msgTypeDiv"><!--  style="display: none"> -->
+              <div class="imgCaptionEditorDiv" style="display: none">
+                <div id="imgCaptionEditor">
+                  <p>Sample</p>
+                </div>
+                <button id="imgCaptionEditorSave" class="btn btn-sm btn-primary float-right">Save</button>
+              </div>
+              <div class="grid">
+                <div class="imgHolder imgHolderPlus"><input type="file" id="uploadImage"><i class="fas fa-plus-circle"></i></div>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button id="modalSubmitModifyConatct" type="button" class="btn btn-primary">Save changes</button>
+            <button id="modalCloseModifyConatct" type="button" class="btn btn-secondary">Close</button>
+          </div>
+          <div class="tipsBox">
+            <!-- <button class="btn btn-xs btn-info" style="margin-bottom: .1rem">Tips : </button> -->
+            <ul class="list-group list-group-flush">
+              <li  class="tips list-group-item text-danger">
+                <div class="tipsIconDiv">
+                    <i class="material-icons">error</i>
+                </div>
+                <div class="tipsTextDiv">
+                    <tt>Monospace</tt> text can not be <b>bold</b> or <i>italic</i> or <strike>striked.</strike> Any formatting over <tt>Monospace</tt> will get ignored
+                </div>
+              </li>
+              <li  class="tips list-group-item text-danger">
+                <div class="tipsIconDiv">
+                    <i class="material-icons">error</i>
+                </div>
+                <div class="tipsTextDiv">
+                    To refer contact's name inside your message use : {#name#}
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL MULTIPLE -->
+    <div class="modal fade addContactMultipleModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add multiple contacts</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="inputContacts">
+               <label for="contactNosRawData">Contact Numbers : </label>
+                <textarea class="form-control" rows="5" id="contactNosRawData" style="resize: vertical;width: 100%;"></textarea>
+                <span class="float-left charLength text-info" style="font-size: 1rem">0</span>
+                <button class="btn btn-sm btn-warning float-right" id="parseContactNosRawData">Verify</button>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="modalSubmitAddContact" type="button" class="btn btn-primary">Add contacts</button>
+            <button id="modalCloseAddContact" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  	<nav class="menubar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow" style="padding: 4px !important">
+	  	<a class="navbar-brand mr-0" href="#">WhatsAppmated</a>
+		
+		<!-- <i class="material-icons isConnected" style="position: absolute;right: 97px;color:#fff" title="No active session">sentiment_very_dissatisfied</i> -->
+        <button id="endSessionNav" class="btn btn-primary btn-sm" disabled>Logout</button>
+        <button id="startSessionNav" class="btn btn-primary btn-sm">Start</button>
+        <button id="sendMessagesNav" class="btn btn-primary btn-sm" disabled="">Send Messages</button>
+        <button id="manageContactsNav" class="btn btn-primary btn-sm">Manage contacts</button>
+        <button id="manageResourcesNav" class="btn btn-primary btn-sm">Manage Resources</button>
+        <div id="sessionStatus" class="btn btn-sm"><i class="material-icons isConnected" style="color:#fff" title="No active session">sentiment_very_dissatisfied</i></div>
+    	
+	</nav>
+    <div class="progress" style="visibility: hidden;">
+        <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+    </div>
+  	<div class="container-fluid" style="height:100%">
+  		<div class="row" style="padding-top: 60px;">
+      		<nav class="col-md-12 col-12">
+      			<div style="width: 100%;display: inline-flex;">
+                <!-- QR CODE PANEL -->
+  				<div class="mypanel qrCodeBoxPanel" style="min-width: 264px;display: none;position:absolute;">
+  					<h4>Let's connect : </h4>
+                        <ol id="OL_1">
+                          <li id="LI_2">
+                            Open WhatsApp on your phone
+                          </li>
+                          <li id="LI_3">
+                            <span id="SPAN_4">Tap <strong id="STRONG_5"><span id="SPAN_6">Menu</span></strong></span>
+                             or <strong id="STRONG_11"><span id="SPAN_12">Settings</span></strong>
+                             and select <strong id="STRONG_17">WhatsApp Web</strong>
+                          </li>
+                          <li id="LI_18">
+                            Point your phone to this screen to capture the code
+                          </li>
+                          <li id="LI_18">
+                            If you see <strong id="STRONG_5">'Could not scan code.'</strong> then please click on <strong id="STRONG_11">Refresh</strong>
+                          </li>
+                        </ol>
+      					<div class="_2EZ_m" style="margin:1%;border: 1px solid #e4dbdb;position: absolute" data-ref="1@o27rU11yFK/sZO0n0dsgY1SNvLS3wADt1LiFNqYtkiO2QiFKN3b/Ewhq,+YzxJqvHX+slmPx5nrPaa2PjtTb10MQ2HBIJXDAYozE=,kJsVScssXIar2wDJ+c/uGQ==">
+							<!-- WHATSAPP LOGO INSIDE CODE -->
+                            <div class="_1jjYO">
+								<span class="_3CSsZ">
+									<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><path fill="#FFF" d="M6.525 43.936a29.596 29.596 0 0 1-3.039-13.075C3.494 14.568 16.755 1.313 33.05 1.313c7.904.004 15.328 3.082 20.91 8.666 5.581 5.586 8.653 13.01 8.65 20.907-.007 16.294-13.266 29.549-29.558 29.549a29.648 29.648 0 0 1-12.508-2.771L1.391 62.687l5.134-18.751z"></path><path fill="#123033" d="M50.801 13.135c-4.739-4.742-11.039-7.354-17.752-7.357-13.837 0-25.094 11.253-25.099 25.085a25.039 25.039 0 0 0 3.349 12.541l-3.56 12.999 13.304-3.488a25.084 25.084 0 0 0 11.996 3.054h.011c13.83 0 25.088-11.256 25.095-25.087.002-6.703-2.607-13.005-7.344-17.747zM33.05 51.733h-.008a20.866 20.866 0 0 1-10.62-2.906l-.762-.452-7.894 2.07 2.108-7.694-.497-.789a20.802 20.802 0 0 1-3.189-11.097c.004-11.496 9.361-20.85 20.87-20.85a20.73 20.73 0 0 1 14.746 6.115 20.733 20.733 0 0 1 6.104 14.752c-.006 11.497-9.363 20.851-20.858 20.851z"></path><path fill="#123033" d="M25.429 19.26a8.65 8.65 0 0 0-1.028.011 2.352 2.352 0 0 0-.95.255c-.221.114-.427.277-.75.582-.305.288-.481.54-.668.782a6.974 6.974 0 0 0-1.443 4.291l.001.003a8.243 8.243 0 0 0 .844 3.607c1.043 2.307 2.763 4.746 5.035 7.008a24.676 24.676 0 0 0 1.657 1.6 24.145 24.145 0 0 0 9.814 5.229s.751.179 1.391.218c.021.001.04.003.061.003a9.207 9.207 0 0 0 1.422-.033 5.086 5.086 0 0 0 2.129-.59c.423-.225.623-.337.978-.561 0 0 .11-.072.319-.23.345-.257.558-.438.845-.736.211-.22.394-.479.534-.772.2-.417.401-1.213.481-1.874.061-.505.042-.781.036-.952-.011-.275-.238-.558-.487-.678l-1.486-.668s-2.222-.967-3.581-1.587a1.278 1.278 0 0 0-.452-.104c-.341-.021-.723.068-.966.324v-.004c-.013-.001-.182.145-2.031 2.385-.102.122-.341.387-.754.362a1.086 1.086 0 0 1-.185-.029 3.402 3.402 0 0 1-.49-.17c-.316-.134-.427-.185-.643-.278l-.013-.006a15.361 15.361 0 0 1-4.013-2.556 15.88 15.88 0 0 1-.927-.885c-1.074-1.041-1.953-2.148-2.607-3.24-.035-.06-.09-.146-.15-.242-.107-.174-.225-.381-.262-.523-.095-.376.157-.678.157-.678s.622-.68.911-1.05c.278-.356.518-.704.671-.952.301-.484.39-.982.238-1.37a216.767 216.767 0 0 0-2.219-5.215c-.156-.339-.598-.589-1.005-.636a6.284 6.284 0 0 0-.414-.041"></path>
+									</svg>
+								</span>
+							</div>
+							<canvas width="264" height="264" style="display: none;">
+							</canvas>
+							<div class="wtsapLoader" style="display: none"></div>
+							<h5 class="clickConnect">Connect to whatsapp</h5>
+							<img id="codeImage" style="display : none;" alt="Scan me!" src="" style="display: block;">
+						</div>
+                        <div id="countdown" style="position: absolute;left: 275px;"></div>
+	      				<div class="btnBox" style="position: relative;top:275px">
+                                <button class="btn btn-primary btn-sm" disabled id="getCode">Refresh code</button>
+    	      				</div>
+      				</div>
+              <!-- MANAGE RESOURCES -->
+      				<div class="mypanel manageResourcesPanel" style="width: 100%;margin-left: 20px;display: none;">
+                <br>
+                <!-- <label for="uploadFile"></label>
+                <input type="file" id="uploadFile" class="form-control"> -->
+                <iframe src="/test.html"></iframe>
+                <br>
+                <div class="accordion" id="accordionExample">
+                  <div class="card">
+                    <div class="card-header" id="headingOne">
+                      <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseImages" aria-expanded="true" aria-controls="collapseImages">
+                          Images
+                        </button>
+                      </h5>
+                    </div>
+
+                    <div id="collapseImages" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                      <div class="card-body">
+                        <div class="gridImages">
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                          <div class="resHolder"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-header" id="headingTwo">
+                      <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseVideos" aria-expanded="false" aria-controls="collapseVideos">
+                          Videos
+                        </button>
+                      </h5>
+                    </div>
+                    <div id="collapseVideos" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                      <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-header" id="headingThree">
+                      <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseDocs" aria-expanded="false" aria-controls="collapseDocs">
+                          Docs
+                        </button>
+                      </h5>
+                    </div>
+                    <div id="collapseDocs" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                      <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- MESSAGE SENDER PANEL -->
+              <div class="mypanel sendMessagesPanel" style="width: 100%;margin-left: 20px;display: none;">
+                        <br>
+      					<table id="sendMessagesDataTable" style="font-size: 12px;" class="table table-striped table-bordered" cellspacing="0" width="100%" tabindex="0">
+                        </table>
+                        <button class="btn btn-primary btn-sm float-right mt-2 d-none" disabled id="sendMessages">Send Messages</button>
+                        <button class="btn btn-primary btn-sm float-right mt-2 d-none" disabled id="selectAllExcel">Select All</button>
+                        <button class="btn btn-primary btn-sm float-right mt-2 d-none" disabled id="selectNoneExcel">Select None</button>
+                        <button class="btn btn-primary btn-sm float-right mt-2 d-none" id="refreshMessages">Refresh</button>
+      				</div>
+              <!-- MANAGE CONTACT PANEL -->
+              <div class="mypanel manageContactPanel" style="width: 100%;margin-left: 20px;display: none;">
+                  <br>
+                  <table id="manageContactsDataTable" style="font-size: 12px;" class="table table-striped table-bordered" cellspacing="0" width="100%" tabindex="0">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Number</th>
+                        <th>Message</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                  <span class="float-left rowsSelected text-info" style="font-size: 1rem">Rows selected : <span>0</span></span>
+                  <button class="btn btn-success btn-sm float-right mt-2" id="saveC">Save contacts</button>
+                  <button class="btn btn-primary btn-sm float-right mt-2" id="refreshContacts">Refresh</button>
+                  <button class="btn btn-primary btn-sm float-right mt-2" id="addMultipleContacts">Add multiple</button>
+                  <button class="btn btn-primary btn-sm float-right mt-2" id="copyMsgToAll">Copy message to all</button>
+              </div>
+      			</div>
+      			
+      		</nav>
+      	</div>
+  	</div>
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js" ></script>
+
+
+    <!-- <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.js" ></script>
+    <!-- BOOTSTRAP DATATABLE -->
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" ></script>
+    <script src="https://cdn.datatables.net/rowreorder/1.2.5/js/dataTables.rowReorder.min.js" ></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js" ></script>
+    <script src="https://cdn.datatables.net/scroller/1.5.0/js/dataTables.scroller.min.js" ></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.19/dataRender/ellipsis.js" ></script>
+    <!-- UNDERSCORE -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js" integrity="sha256-G7A4JrJjJlFqP0yamznwPjAApIKPkadeHfyIwiaa9e0=" crossorigin="anonymous"></script>
+
+    <!-- COUNTDOWN 360 -->
+    <script src="https://rawgit.com/johnschult/jquery.countdown360/master/dist/jquery.countdown360.min.js" ></script>
+
+    <!-- CONTEXTMENU -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.8.0/jquery.contextMenu.js" integrity="sha256-A/GR/ox/7s8YwgyHwSYuXwKqm8DjpsYwdlp+fPpjRTs=" crossorigin="anonymous"></script>
+
+    <!-- QUILL -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-firestore.js"></script>
+    <script src="index.js"></script>
+
+
+  </body>
+</html>
