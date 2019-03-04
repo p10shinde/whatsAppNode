@@ -205,72 +205,35 @@
                 <br>
                 <iframe src="/test.html" class="uploaderFrame" style="display: none"></iframe>
                 <br>
+                <!-- The blueimp Gallery widget -->
+                <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+                    <div class="slides"></div>
+                    <h3 class="title"></h3>
+                    <a class="prev">‹</a>
+                    <a class="next">›</a>
+                    <a class="close">×</a>
+                    <a class="play-pause"></a>
+                    <ol class="indicator"></ol>
+                </div>
                 <div class="accordion" id="accordionExample">
                   <div class="card">
-                    <div class="card-header" id="headingOne">
+                    <div class="card-header" id="imagesCardHeading">
                       <h5 class="mb-0">
                         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseImages" aria-expanded="true" aria-controls="collapseImages">
                           Images
                         </button>
-                        <button class="btn btn-link float-right" type="button">
+                        <button class="btn btn-link float-right reloadImages" type="button">
                           <i class="fas fa-sync-alt"></i>
                         </button>
                       </h5>
                     </div>
 
-                    <div id="collapseImages" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div id="collapseImages" class="collapse show" aria-labelledby="imagesCardHeading" data-parent="#accordionExample">
                       <div class="card-body">
-                        <!-- The blueimp Gallery widget -->
-                        <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
-                            <div class="slides"></div>
-                            <h3 class="title"></h3>
-                            <a class="prev">‹</a>
-                            <a class="next">›</a>
-                            <a class="close">×</a>
-                            <a class="play-pause"></a>
-                            <ol class="indicator"></ol>
-                        </div>
+                        
+                        <h5 class='noDataError' style="display: none;text-align: center">No Data Available</h5>
                         <div class="gridImages">
                           <!-- <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
-                          <div class="resHolder"></div>
                           <div class="resHolder"></div>
                           <div class="resHolder"></div>
                           <div class="resHolder"></div>
@@ -280,16 +243,19 @@
                     </div>
                   </div>
                   <div class="card">
-                    <div class="card-header" id="headingTwo">
+                    <div class="card-header" id="videosCardHeading">
                       <h5 class="mb-0">
                         <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseVideos" aria-expanded="false" aria-controls="collapseVideos">
                           Videos
                         </button>
                       </h5>
                     </div>
-                    <div id="collapseVideos" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div id="collapseVideos" class="collapse" aria-labelledby="videosCardHeading" data-parent="#accordionExample">
                       <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        <h5 class='noDataError' style="display: none;text-align: center">No Data Available</h5>
+                        <div class="gridVideos">
+                         
+                        </div>
                       </div>
                     </div>
                   </div>

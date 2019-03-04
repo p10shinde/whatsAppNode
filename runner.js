@@ -29,7 +29,7 @@ projectDB.on('disconnected', function () {
 var MDLcontacts = require('./models/MDLcontacts');
 
 
-var fs = require('fs')
+var fs = require('fs');
 var nocache = require('nocache')
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -43,6 +43,8 @@ const excelToJson = require('convert-excel-to-json');
 var Excel = require('exceljs');
 const _ = require('underscore');
 var multer	=	require('multer');
+var gm = require('gm');
+
 
 const admin = require('firebase-admin');
 var serviceAccount = require('./wtsapproject-cd387d40d4a1.json');
@@ -56,6 +58,7 @@ global.ctcURL = "https://wa.me/##__NUMBER__##?text=##__TEXT__##"
 global.db;
 global.isActive = false
 global.imageDir = "data/i/";
+global.videoDir = "data/v/";
 
 // ############## APP OPTIONS ######################
 var app = express();
@@ -87,19 +90,19 @@ global.allowedExtensions = {
 global.uploadedFiles = {files:[]};
 
 
-(function(){
-	admin.initializeApp({
-	  credential: admin.credential.cert(serviceAccount)
-	});
-	global.db = admin.firestore();
-	console.log('Connected to firebase...')
+// (function(){
+// 	admin.initializeApp({
+// 	  credential: admin.credential.cert(serviceAccount)
+// 	});
+// 	global.db = admin.firestore();
+// 	console.log('Connected to firebase...')
 
-	db.collection("users").doc("userid1")
-	    .onSnapshot(function(doc) {
-	        console.log("Current data: ", doc.data());
-            global.isActive = doc.data().isActive
-	    });
-})();
+// 	db.collection("users").doc("userid1")
+// 	    .onSnapshot(function(doc) {
+// 	        console.log("Current data: ", doc.data());
+//             global.isActive = doc.data().isActive
+// 	    });
+// })();
 
 function updateFbUser(res){
 	db.collection('users').doc('userid1').set({'isActive' : res}, {merge:true})
@@ -154,12 +157,13 @@ router.get('/getimages', function(req, res){
 	var basicUrl = 'http://localhost:4001/api';
 	try{
 		fs.readdirSync(global.imageDir).forEach(file => {
-			var thumbnailUrl = basicUrl+'/serve?res=i/'+file;
+			var thumbnailUrl = basicUrl+'/serve?res=thumbnail/'+file;
+			var url = basicUrl+'/serve?res=i/'+file;
 		   files.files.push({
 			  	name:file,
 			  	size:file.size,
 				type:'image',
-				url:thumbnailUrl,
+				url:url,
 				thumbnailUrl : thumbnailUrl,
 				deleteUrl: thumbnailUrl,
 				deleteType:'DELETE'
@@ -173,37 +177,110 @@ router.get('/getimages', function(req, res){
 	}
 });
 
+router.get('/getvideos', function(req, res){
+	var files = { files : [] }
+	var basicUrl = 'http://localhost:4001/api';
+	try{
+		fs.readdirSync(global.videoDir).forEach(file => {
+			var thumbnailUrl = basicUrl+'/serve?res=refer/.mp4.png';
+			var url = basicUrl+'/serve?res=v/'+file;
+		   files.files.push({
+				title:file,
+				poster : thumbnailUrl,
+				href : url,
+			  	name:file,
+			  	size:file.size,
+				type:'video',
+				url:url,
+				thumbnailUrl : thumbnailUrl,
+				deleteUrl: url,
+				deleteType:'DELETE'
+			})
+		});
+		// const stats = fs.statSync(global.imageDir+'/test.jpg')
+		res.json(files);
+	}catch(E_){
+		console.log(E_)
+		res.json('Error')
+	}
+});
 
-router.post('/photo',upload.single('files[]') , async function(req,res){
+router.delete('/deleteRes', function(req, res){
+	try{
+		var data = req.body;
+		if(data.type == 'image'){
+			fs.unlinkSync(global.imageDir + data.name)
+			res.json('Deleted');
+		}else if(data.type == 'video'){
+			fs.unlinkSync(global.videoDir + data.name)
+			res.json('Deleted');
+		}else{
+			res.json('Unknonw type');
+
+		}
+	}catch(E_){
+		if(E_.code == 'ENOENT'){
+			res.json('File not found')
+		}else{
+			res.json('Error')
+		}
+		console.log(E_)
+	}
+});
+
+
+router.post('/uploadres',upload.single('files[]') , async function(req,res){
 	global.uploadedFiles.files=[];
 	if (req.file) {
         var basicUrl = 'http://localhost:4001/api';
         var file = req.file;
 	  	if(global.allowedExtensions.image.exec(file.originalname)){
-		    var thumbnailUrl = basicUrl+'/serve?res=i/'+file.originalname;
-		  	 global.uploadedFiles.files.push({name:file.originalname,size:file.size,
-		  	 					type:'image',
-		  	 					url:thumbnailUrl,
-		  	 					thumbnailUrl : thumbnailUrl,
-		  	 					deleteUrl: thumbnailUrl,
-		  	 					deleteType:'DELETE'})
+		  		await gm(global.imageDir + file.originalname)
+				  .resize(117, 110)
+				  .write(global.imageDir + '../thumbnail/' + file.originalname, async function(err){
+				    if (err) return console.dir(arguments)
+				    var thumbnailUrl = basicUrl+'/serve?res=thumbnail/'+file.originalname;
+				    var url = basicUrl+'/serve?res=i/'+file.originalname;
+				    global.uploadedFiles.files = [];
+				  	 global.uploadedFiles.files.push({name:file.originalname,size:file.size,
+				  	 					title:file.originalname,
+				  	 					type:'image',
+				  	 					url:url,
+				  	 					thumbnailUrl : thumbnailUrl,
+				  	 					deleteUrl: thumbnailUrl,
+				  	 					deleteType:'DELETE'})
+				  	 res.json(global.uploadedFiles)
+				  }
+				)
 	  	}else if(global.allowedExtensions.ms.exec(file.originalname)){
+	  		global.uploadedFiles.files = [];
+	  		
 		    var thumbnailUrl = basicUrl+'/serve?res=refer/'+global.allowedExtensions.ms.exec(file.originalname)[0]+'.png';
 		  	 global.uploadedFiles.files.push({name:file.originalname,size:file.size,
+		  	 					title:file.originalname,
 		  	 					type:'ms',
 		  	 					url:thumbnailUrl,
 		  	 					thumbnailUrl : thumbnailUrl,
 		  	 					deleteUrl: basicUrl+'/serve/'+file.originalname,
 		  	 					deleteType:'DELETE'})
+		  	 res.json(global.uploadedFiles)
 	  	}else if(global.allowedExtensions.video.exec(file.originalname)){
-		    var thumbnailUrl = basicUrl+'/serve?res=v/'+file.originalname;
+	  		global.uploadedFiles.files = [];
+	  		
+		    var thumbnailUrl = basicUrl+'/serve?res=refer/.mp4.png';
+		    var url = basicUrl+'/serve?res=v/'+file.originalname;
 		  	 global.uploadedFiles.files.push({name:file.originalname,size:file.size,
+		  	 					title:file.originalname,
 		  	 					type:'video',
-		  	 					url:thumbnailUrl,
+		  	 					url:url,
 		  	 					thumbnailUrl : thumbnailUrl,
+		  	 					poster : thumbnailUrl,
+		  	 					href : url,
 		  	 					deleteUrl: basicUrl+'/serve/'+file.originalname,
 		  	 					deleteType:'DELETE'})
+		  	 res.json(global.uploadedFiles)
 	  	}else if(global.allowedExtensions.audio.exec(file.originalname)){
+	  		global.uploadedFiles.files = [];
 		    var thumbnailUrl = basicUrl+'/serve?res=refer/'+global.allowedExtensions.audio.exec(file.originalname)[0]+'.png';
 		  	 global.uploadedFiles.files.push({name:file.originalname,size:file.size,
 		  	 					type:'audio',
@@ -211,6 +288,7 @@ router.post('/photo',upload.single('files[]') , async function(req,res){
 		  	 					thumbnailUrl : thumbnailUrl,
 		  	 					deleteUrl: basicUrl+'/serve/'+file.originalname,
 		  	 					deleteType:'DELETE'})
+		  	 res.json(global.uploadedFiles)
 	  	}else{
 		    console.log('junk')
 		    var thumbnailUrl = basicUrl+'/serve?res=refer/unknown.png';
@@ -220,8 +298,10 @@ router.post('/photo',upload.single('files[]') , async function(req,res){
 		  	 					thumbnailUrl : thumbnailUrl,
 		  	 					deleteUrl: thumbnailUrl,
 		  	 					deleteType:'DELETE'})
+		  	 res.json(global.uploadedFiles)
 	  	}
-        await res.json(global.uploadedFiles)
+	  	// console.log(global.uploadedFiles)
+        // res.json(global.uploadedFiles)
     } else {
         console.log('No File Uploaded');
         var filename = 'FILE NOT UPLOADED';
@@ -469,7 +549,14 @@ async function sendmessage(req, res){
 }
 
 
-router.get('/', function(req, res) { res.json('running'); });
+router.get('/', function(req, res) { 
+gm(__dirname + '/data/junk/Untitled.png')
+				  .resize(58, 50, '%')
+				  .write(__dirname + '/data/junk/thumb/t_Untitled.png', function(err){
+				    if (err) return console.dir(arguments)
+				    console.log(this.outname + " created  ::  " + arguments[3])
+				  }
+				);res.json('running'); });
 app.use('/api', router); app.listen(4001); console.log('running...');
 
 

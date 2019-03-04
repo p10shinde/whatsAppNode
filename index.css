@@ -508,14 +508,14 @@ table img{
   padding: 0 !important;
 }
 
-.gridImages {
+.gridImages, .gridVideos {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     grid-gap: 10px;
     width: 100%;
 }
 
-.gridImages div.resHolder{
+div.resHolder{
   height: 110px;
   width: 117px;
   border: 1px solid #c9c4c4;
@@ -523,24 +523,49 @@ table img{
   box-sizing: content-box;
   position: relative;
 }
-.gridImages div.resHolder img{
+.gridImages div.resHolder img,
+.gridVideos div.resHolder video{
   width: 117px;
   height: 110px;
-  cursor: pointer;
 }
 
-.gridImages div.resHolder div.hov {
+div.resHolder div.resTools {
     /*content:'\A';*/
-    display: none;
+    display: flex;
     position:absolute;
-    width:100%; height:100%;
-    top:0; left:0;
+    width:100%; height:25px;
+    bottom:0; left:0;
     background:rgba(0,0,0,0.6);
     /*opacity:1;*/
     /*transition: all 0.5s;
     -webkit-transition: all 0.5s;*/
 }
 
+div.resHolder div.resTools button{
+  color: white;
+  background: transparent;
+  border: #5d5a5a;
+  flex: 1 1 auto!important;
+  outline: none !important;
+  margin: 0;
+  border-radius: 0 !important;
+
+}
+
+div.resHolder div.resTools button:focus{
+  box-shadow: 0 0 0 0.1rem rgba(206, 206, 206, 0.5);
+}
+div.resHolder div.resTools button:hover{
+  background: #ccc;
+  color: black;
+}
+
+div.resHolder div.resTools button:first-child(){
+  margin-left: 2px;
+}
+div.resHolder div.resTools button:last-child(){
+  margin-right: 2px;
+}
 
 #collapseImages .card-body{
   max-height: 630px;

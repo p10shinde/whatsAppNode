@@ -146,9 +146,18 @@ window.onload = function(){
     $('.panelToggleButton').on('click', global.panelToggleButton);
 
     
-    $('.gridImages').on('click', '.resHolder div.hov', global.images.imageClick);
-    $('.gridImages').on('mouseover', '.resHolder', global.images.mouseover);
-    $('.gridImages').on('mouseout', '.resHolder', global.images.mouseout);
+    $('.gridImages').on('click', '.resHolder .resTools button.viewImage', global.images.imageClick);
+    $('.gridImages').on('click', '.resHolder .resTools button.deleteImage', global.images.deleteRes);
+    // $('.gridImages').on('mouseover', '.resHolder', global.images.mouseover);
+    // $('.gridImages').on('mouseout', '.resHolder', global.images.mouseout);
+    $('#imagesCardHeading button.reloadImages').on('click', global.images.reloadImages);
+
+
+    $('.gridVideos').on('click', '.resHolder .resTools button.viewVideo', global.videos.videoClick);
+    $('.gridVideos').on('click', '.resHolder .resTools button.deleteVideo', global.videos.deleteRes);
+    // $('.gridImages').on('mouseover', '.resHolder', global.images.mouseover);
+    // $('.gridImages').on('mouseout', '.resHolder', global.images.mouseout);
+    $('#videosCardHeading button.reloadVideos').on('click', global.videos.reloadVideos);
 
     $('.messageEditorModal').on('show.bs.modal', function() {
         $("#contactName").val("");
@@ -234,11 +243,10 @@ function declareFunctions(){
         $(".manageResourcesPanel").show();
         $(".manageContactPanel").hide();
         $(".sendMessagesPanel").hide();
-        if($('.gridImages div').length == 0){
-            global.images.getImages(function(data){
-                global.images.renderImages(data)
-            });
-        }
+        
+        global.images.getAndRenderImages(false);
+        global.videos.getAndRenderVideos(false);
+
         
     }
 
@@ -684,7 +692,8 @@ function declareFunctions(){
     
    }
    global.imgHolderDeleteImage = function(event){
-    $(this.closest('.imgHolder')).remove()
+    $(this.closest('.imgHolder')).remove();
+    
    }
 
    global.imgHolderAddCaption = function(event){
@@ -711,6 +720,87 @@ function declareFunctions(){
     })
    }
 
+   global.videos = {
+       getVideos : function(cb){
+            $.ajax({
+             url : `${global.apiurl}getvideos`,
+             async : true,
+             dataType : 'json',
+             complete : function(jqXHR, status){
+                if(status == "success"){
+                    global.videos.latestVideos = jqXHR.responseJSON.files;
+                    cb(jqXHR.responseJSON.files)
+                }else if(status == "error"){
+                    cb([])
+                    $.notify(JSON.stringify(jqXHR.responseJSON),'error')
+                }
+             }
+            })
+        },
+        deleteRes : function(event){
+            var resHolder = $(event.target).closest('div.resHolder');
+            var data = JSON.parse(resHolder.attr('video-data'));
+            console.log(data);
+            $.ajax({
+             url : `${global.apiurl}deleteRes`,
+             type : 'DELETE',
+             async : true,
+             data : data,
+             dataType : 'json',
+             complete : function(jqXHR, status){
+                if(status == "success"){
+                    // global.images.getAndRenderImages(true);
+                    global.videos.latestVideos = _.without(global.videos.latestVideos, _.findWhere(global.videos.latestVideos, {name : data.name}));
+                    resHolder.remove();
+                }else if(status == "error"){
+                    $.notify(JSON.stringify(jqXHR.responseJSON),'error')
+                }
+             }
+            })
+        },
+        renderVideos : function(data){
+            $('.gridVideos').empty();
+            if(data.length == 0) $('#collapseVideos .card-body .noDataError').show();
+            else $('#collapseVideos .card-body .noDataError').hide();
+            $.each(data, function(k,video){
+                $('.gridVideos').append(`<div class="resHolder" video-data='${JSON.stringify(video)}'><video src="${video.url}"></video>
+                    <div class='resTools'>
+                        <button class="btn btn-sm p-0 viewVideo"><i class="fas fa-tv"></i></button>
+                        <button class="btn btn-sm p-0 deleteVideo"><i class="far fa-trash-alt"></i></button>
+                    </div>
+                </div>`);
+            })
+
+        },
+        getAndRenderVideos : function(force){
+            if($('.gridVideos div').length == 0 || force){
+                global.videos.getVideos(function(data){
+                    global.videos.renderVideos(data)
+                });
+            }
+        },
+        videoClick : function(event){
+            _.map(global.videos.latestVideos, function(v){ return v.type = 'video/mp4'})
+            var gallery = blueimp.Gallery(global.videos.latestVideos,'url');
+            var index = $('.gridVideos').children().index($(this).closest('div.resHolder'));
+            gallery.slide(index, 1);
+        },
+        latestVideos : [],
+        mouseover : function(event){
+            // $('div.resHolder div.hov').fadeOut(1);
+            $(this).find('div.hov').fadeIn();
+            // setTimeout(function(){
+            //     $('div.resHolder div.hov').fadeOut(1);
+            // },2000)
+        },
+        mouseout : function(event){
+            $(this).find('div.hov').fadeOut(1);
+        },
+        reloadVideos : function(event){
+            global.videos.getAndRenderVideos(true);
+        }
+   }
+
    global.images = {
         getImages : function(cb){
             $.ajax({
@@ -726,18 +816,53 @@ function declareFunctions(){
                     $.notify(JSON.stringify(jqXHR.responseJSON),'error')
                 }
              }
-             })
+            })
+        },
+        deleteRes : function(event){
+            var resHolder = $(event.target).closest('div.resHolder');
+            var data = JSON.parse(resHolder.attr('image-data'));
+            console.log(data);
+            $.ajax({
+             url : `${global.apiurl}deleteRes`,
+             type : 'DELETE',
+             async : true,
+             data : data,
+             dataType : 'json',
+             complete : function(jqXHR, status){
+                if(status == "success"){
+                    // global.images.getAndRenderImages(true);
+                    global.images.latestImages = _.without(global.images.latestImages, _.findWhere(global.images.latestImages, {name : data.name}));
+                    resHolder.remove();
+                }else if(status == "error"){
+                    $.notify(JSON.stringify(jqXHR.responseJSON),'error')
+                }
+             }
+            })
         },
         renderImages : function(data){
             $('.gridImages').empty();
+            if(data.length == 0) $('#collapseImages .card-body .noDataError').show();
+            else $('#collapseImages .card-body .noDataError').hide();
             $.each(data, function(k,img){
-                $('.gridImages').append(`<div class="resHolder"><img src="${img.thumbnailUrl}"/><div class='hov'></div></div>`);
+                $('.gridImages').append(`<div class="resHolder" image-data='${JSON.stringify(img)}'><img src="${img.thumbnailUrl}"/>
+                    <div class='resTools'>
+                        <button class="btn btn-sm p-0 viewImage"><i class="fas fa-tv"></i></button>
+                        <button class="btn btn-sm p-0 deleteImage"><i class="far fa-trash-alt"></i></button>
+                    </div>
+                </div>`);
             })
 
         },
+        getAndRenderImages : function(force){
+            if($('.gridImages div').length == 0 || force){
+                global.images.getImages(function(data){
+                    global.images.renderImages(data)
+                });
+            }
+        },
         imageClick : function(event){
             var gallery = blueimp.Gallery(_.pluck(global.images.latestImages,'url'));
-            
+            var index = $('.gridImages').children().index($(this).closest('div.resHolder'));
             gallery.slide(index, 1);
         },
         latestImages : [],
@@ -750,6 +875,9 @@ function declareFunctions(){
         },
         mouseout : function(event){
             $(this).find('div.hov').fadeOut(1);
+        },
+        reloadImages : function(event){
+            global.images.getAndRenderImages(true);
         }
     }
 
