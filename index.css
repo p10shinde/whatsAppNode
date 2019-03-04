@@ -529,7 +529,7 @@ div.resHolder{
   height: 110px;
 }
 
-div.resHolder div.resTools {
+div.resHolder div.resTools, div.resHolder div.resTitle {
     /*content:'\A';*/
     display: flex;
     position:absolute;
@@ -540,6 +540,23 @@ div.resHolder div.resTools {
     /*transition: all 0.5s;
     -webkit-transition: all 0.5s;*/
 }
+
+
+div.resHolder div.resTitle{
+  top: 0;
+  text-align: center;
+  height: 17px;
+}
+
+div.resHolder div.resTitle span{
+  color: white;
+  flex: 1;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 
 div.resHolder div.resTools button{
   color: white;

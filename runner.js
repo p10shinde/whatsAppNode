@@ -161,9 +161,12 @@ router.get('/getimages', function(req, res){
 			var url = basicUrl+'/serve?res=i/'+file;
 		   files.files.push({
 			  	name:file,
+			  	title:file,
 			  	size:file.size,
 				type:'image',
 				url:url,
+				href:url,
+				thumbnail : thumbnailUrl,
 				thumbnailUrl : thumbnailUrl,
 				deleteUrl: thumbnailUrl,
 				deleteType:'DELETE'
@@ -587,7 +590,8 @@ async function parseExcel(req, res){
 			_.each(i_message, function(v){
 			   json['name'] = json['name'] + v.split('##||##')[0] + "##||##";
 
-				json['url'] = json['url'] + req.protocol + '://' + req.get('host') + '/api/serve/'+v.split('##||##')[0] + "##||##";
+				json['url'] = json['url'] + req.protocol + '://' + req.get('host') + '/api/serve/i/'+v.split('##||##')[0] + "##||##";
+				json['thumbnailurl'] = json['thumbnailurl'] + req.protocol + '://' + req.get('host') + '/api/serve/thumbnail/'+v.split('##||##')[0] + "##||##";
 				// json['base'] = json['base'] + await base64_encode(v.split('##||##')[0]) + "##||##";
 
 			})

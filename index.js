@@ -763,7 +763,9 @@ function declareFunctions(){
             if(data.length == 0) $('#collapseVideos .card-body .noDataError').show();
             else $('#collapseVideos .card-body .noDataError').hide();
             $.each(data, function(k,video){
-                $('.gridVideos').append(`<div class="resHolder" video-data='${JSON.stringify(video)}'><video src="${video.url}"></video>
+                $('.gridVideos').append(`
+                    <div class="resHolder" video-data='${JSON.stringify(video)}'>
+                    <video src="${video.url}" title="${video.name}"></video>
                     <div class='resTools'>
                         <button class="btn btn-sm p-0 viewVideo"><i class="fas fa-tv"></i></button>
                         <button class="btn btn-sm p-0 deleteVideo"><i class="far fa-trash-alt"></i></button>
@@ -780,8 +782,9 @@ function declareFunctions(){
             }
         },
         videoClick : function(event){
-            _.map(global.videos.latestVideos, function(v){ return v.type = 'video/mp4'})
-            var gallery = blueimp.Gallery(global.videos.latestVideos,'url');
+            var videosCopy = Object.assign({}, global.videos.latestVideos);
+            _.map(videosCopy, function(v){ return v.type = 'video/mp4'})
+            var gallery = blueimp.Gallery(videosCopy);
             var index = $('.gridVideos').children().index($(this).closest('div.resHolder'));
             gallery.slide(index, 1);
         },
@@ -844,7 +847,12 @@ function declareFunctions(){
             if(data.length == 0) $('#collapseImages .card-body .noDataError').show();
             else $('#collapseImages .card-body .noDataError').hide();
             $.each(data, function(k,img){
-                $('.gridImages').append(`<div class="resHolder" image-data='${JSON.stringify(img)}'><img src="${img.thumbnailUrl}"/>
+                $('.gridImages').append(`
+                    <div class="resHolder" image-data='${JSON.stringify(img)}'>
+                    <img src="${img.thumbnailUrl}" alt="${img.name}" title="${img.name}" />
+                    <div class='resTitle'>
+                        <span>${img.name}</span>
+                    </div>
                     <div class='resTools'>
                         <button class="btn btn-sm p-0 viewImage"><i class="fas fa-tv"></i></button>
                         <button class="btn btn-sm p-0 deleteImage"><i class="far fa-trash-alt"></i></button>
@@ -861,7 +869,9 @@ function declareFunctions(){
             }
         },
         imageClick : function(event){
-            var gallery = blueimp.Gallery(_.pluck(global.images.latestImages,'url'));
+            var imagesCopy = JSON.parse(JSON.stringify(global.images.latestImages));
+            _.map(imagesCopy, function(v){ return v.type = 'image/jpeg'})
+            var gallery = blueimp.Gallery(imagesCopy);
             var index = $('.gridImages').children().index($(this).closest('div.resHolder'));
             gallery.slide(index, 1);
         },
