@@ -137,10 +137,10 @@ window.onload = function(){
     $('#modalSubmitAddContact').on('click', global.modalSubmitAddContact);
 
     $('#messageType').on('change', global.messageTypeChange);
-    $('#uploadImage').on('change', global.uploadImageChange);
+    $('.imgHolderPlus').on('change', global.uploadImageChange);
 
     $('.imageTypeDiv').on('click','.imgHolder .delImage', global.imgHolderDeleteImage);
-    $('.imageTypeDiv').on('click','.imgHolder .addCaption', global.imgHolderAddCaption);
+    $('.imageTypeDiv').on('click','.imgHolder', global.imgHolderAddCaption);
     $('#imgCaptionEditorSave').on('click', global.imgCaptionEditorSave);
 
     $('.panelToggleButton').on('click', global.panelToggleButton);
@@ -438,19 +438,17 @@ function declareFunctions(){
         $("#contactNumber").val(data['contactNumber']);
         $("#messageType").val(data['type']);
         if(data['type'] == 'image'){
-            $('.grid').contents(':not(.imgHolderPlus)').remove();
+            $('.gridSmall').contents(':not(.imgHolderPlus)').remove();
             $.each(data['data'], function(key,val){
                 $(".textTypeDiv").hide();
                 $(".imageTypeDiv").show();
                 var fileName = val['fName']
-                $(".grid").prepend(`
+                $(".gridSmall").prepend(`
                     <div class="imgHolder" data-msg='${val['text']}' data-delta='${val['delta']}'>
                         <img title="${fileName}" alt="${fileName}" src="${val['url']}"/>
                         <div class='imageTitle' title='${fileName}'>${fileName}</div>
                         <div class="imgOptions">
-                            <a href="#" class="showImage">View</a>
-                            <a href="#" class="addCaption">Caption</a>
-                            <a href="#" class="delImage">Delete</a>
+                            <a href="#" class="delImage">x</a>
                         </div>
                     </div>`)
             });
@@ -668,17 +666,17 @@ function declareFunctions(){
 
                     reader.onload = function (e) {
                         var fileName = input.files[0].name;
-                        $(".grid").prepend(`
+                        $(".gridSmall").prepend(`
                             <div class="imgHolder" data-msg='' data-delta=''>
                                 <img title="${fileName}" alt="${fileName}" src="${e.target.result}"/>
                                 <div class='imageTitle' title='${fileName}'>${fileName}</div>
                                 <div class="imgOptions">
-                                    <a href="#" class="showImage">View</a>
-                                    <a href="#" class="addCaption">Caption</a>
-                                    <a href="#" class="delImage">Delete</a>
+                                    <a href="#" class="delImage">x</a>
                                 </div>
                             </div>`)
-                        global.editRecordData.data.push({text:'',delta:'',fName:fileName,url:'http://localhost:4001/api/serve/'+fileName})
+                        if(_.isEmpty(global.editRecordData))
+                            global.editRecordData = {data:[]};
+                        global.editRecordData.data.push({text:'',delta:'',fName:fileName,url:'http://localhost:4001/api/serve?res=thumbnail/'+fileName})
                     }
 
                     reader.readAsDataURL(input.files[0]);
@@ -688,6 +686,7 @@ function declareFunctions(){
         }
     }
    global.uploadImageChange = function(event){
+    $(".pickResourcesModal").modal('toggle');
     readURL(this);
     
    }
@@ -861,10 +860,31 @@ function declareFunctions(){
             })
 
         },
+        renderImagesToPickRes : function(data){
+            $('.pickResourcesModal .gridImages').empty();
+            if(data.length == 0) $('.pickResourcesModal.noDataError').show();
+            else $('.pickResourcesModal .noDataError').hide();
+            $.each(data, function(k,img){
+                $('.pickResourcesModal .gridImages').append(`
+                    <div class="resHolder" image-data='${JSON.stringify(img)}'>
+                    <img src="${img.thumbnailUrl}" alt="${img.name}" title="${img.name}" />
+                    <div class='resTitle'>
+                        <span>${img.name}</span>
+                    </div>
+                </div>`);
+            })
+        },    
         getAndRenderImages : function(force){
             if($('.gridImages div').length == 0 || force){
                 global.images.getImages(function(data){
                     global.images.renderImages(data)
+                });
+            }
+        },
+        getAndRenderImagesToPickRes : function(force){
+            if($('.pickResourcesModal .gridImages div').length == 0 || force){
+                global.images.getImages(function(data){
+                    global.images.renderImagesToPickRes(data)
                 });
             }
         },

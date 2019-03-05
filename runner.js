@@ -213,6 +213,7 @@ router.delete('/deleteRes', function(req, res){
 		var data = req.body;
 		if(data.type == 'image'){
 			fs.unlinkSync(global.imageDir + data.name)
+			fs.unlinkSync(global.imageDir + '../thumbnail/' + data.name)
 			res.json('Deleted');
 		}else if(data.type == 'video'){
 			fs.unlinkSync(global.videoDir + data.name)
