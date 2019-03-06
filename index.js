@@ -137,10 +137,12 @@ window.onload = function(){
     $('#modalSubmitAddContact').on('click', global.modalSubmitAddContact);
 
     $('#messageType').on('change', global.messageTypeChange);
-    $('.imgHolderPlus').on('change', global.uploadImageChange);
+    $('.imgHolderPlus').on('click', global.uploadImageClick);
+    $('.pickResourcesModal').on('click', '.resHolder', global.pickResClick);
+    $('.pickResourcesModal').on('click', '#pickResourceSubmit', global.pickResourceSubmit);
 
     $('.imageTypeDiv').on('click','.imgHolder .delImage', global.imgHolderDeleteImage);
-    $('.imageTypeDiv').on('click','.imgHolder', global.imgHolderAddCaption);
+    $('.imageTypeDiv').on('click','.imgHolder :not(.imgHolderPlus)', global.imgHolderAddCaption);
     $('#imgCaptionEditorSave').on('click', global.imgCaptionEditorSave);
 
     $('.panelToggleButton').on('click', global.panelToggleButton);
@@ -496,7 +498,7 @@ function declareFunctions(){
         $.ajax({
           type: "PUT",
           "async" : false,
-          url: `${global.apiurl}updatecontacts`,
+          url: `${global.apiurl}putc`,
           data: JSON.stringify(global.dtob.cntDt.fnGetData()),
           complete : function(jqXHR, textStatus){
             if(textStatus == "success"){
@@ -685,14 +687,42 @@ function declareFunctions(){
             }
         }
     }
-   global.uploadImageChange = function(event){
+   global.uploadImageClick = function(event){
     $(".pickResourcesModal").modal('toggle');
-    readURL(this);
+    global.images.getAndRenderImagesToPickRes(true);
+    // readURL(this);
     
    }
+
+   global.pickResClick = function(event){
+       $(this).toggleClass('resSelected');
+   }
+
+   global.pickResourceSubmit = function(event){
+       $.each($('.pickResourcesModal .resHolder.resSelected'), function(index, selected){
+           var data = JSON.parse($(selected).attr('image-data'))
+           $(".gridSmall").prepend(`
+                <div class="imgHolder" data-msg='' data-delta=''>
+                    <img title="${data.title}" alt="${data.title}" src="${data.href}"/>
+                    <div class='imageTitle' title='${data.title}'>${data.title}</div>
+                    <div class="imgOptions">
+                        <a href="#" class="delImage">x</a>
+                    </div>
+                </div>`)
+            if(_.isEmpty(global.editRecordData))
+                global.editRecordData = {data:[]};
+            global.editRecordData.data.push({text:'',delta:'',fName:data.title,url:'http://localhost:4001/api/serve?res=thumbnail/'+data.title})
+       })
+       $(".pickResourcesModal").modal('toggle');
+
+   }
+
    global.imgHolderDeleteImage = function(event){
+    var fName = $(this.closest('.imgHolder')).find('img').attr('title');
+    global.editRecordData.data = _.filter(global.editRecordData.data, function(v){
+        if(v.fName != fName) return v;
+    })    
     $(this.closest('.imgHolder')).remove();
-    
    }
 
    global.imgHolderAddCaption = function(event){
@@ -702,8 +732,12 @@ function declareFunctions(){
 
     $.each(global.editRecordData['data'], function(k,v){
         var fileName = v['fName'];
-        if(fileName == $(event.target).closest('.imgHolder').find('div.imageTitle').text())
-            global.imgCaptionMessage.setContents(JSON.parse(v['delta']));
+        if(fileName == $(event.target).closest('.imgHolder').find('div.imageTitle').text()){
+            if(v['delta'] != "")
+                global.imgCaptionMessage.setContents(JSON.parse(v['delta']));
+            else
+                global.imgCaptionMessage.setText("");
+        }
     })
    }
 

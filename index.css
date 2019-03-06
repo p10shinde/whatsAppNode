@@ -517,8 +517,8 @@ div.resHolder{
 }
 .gridImages div.resHolder img,
 .gridVideos div.resHolder video{
-  width: 117px;
-  height: 110px;
+  height: 100%;
+  width: 100%;
 }
 
 div.resHolder div.resTools, div.resHolder div.resTitle {
@@ -598,4 +598,9 @@ iframe{
 .modal-body .gridImages .resHolder{
   width: 93px;
   height: 93px;
+}
+
+.resSelected {
+  border: 5px solid #4f8cee !important;
+  box-sizing: border-box !important; 
 }

@@ -364,6 +364,7 @@ async function getc(req, res){
 					}else{
 						_.each(msg['data'], function(msgData){
 								obj['stepNo'] = stepNo++;
+								obj['id'] = msg['id'];
 								obj['text'] = msgData['text'];
 								obj['url'] = msgData['url'];
 								obj['fName'] = msgData['fName'];
@@ -384,8 +385,14 @@ async function putc(req, res){
 	try{
 		_.each(req.body, async function(v){
 			try{
-				await MDLcontacts.deleteOne({'contactNumber':v['contactNumber']}).exec();
-				var collection = await new MDLcontacts(v).save();
+				var collection = await MDLcontacts.findOne({'contactNumber':v['contactNumber']}).exec();
+				if(collection == null){
+					await new MDLcontacts(v).save();
+				}
+				else{
+					await MDLcontacts.deleteOne({'contactNumber':v['contactNumber']}).exec();
+					
+				}
 			}catch(E_){
 				console.log(E_)
 			}
