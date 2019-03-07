@@ -356,7 +356,7 @@ async function getc(req, res){
 					obj['contactName'] = v['contactName'];obj['contactNumber'] = v['contactNumber'];
 					
 					obj['type'] = msg['type'];
-					obj['idd'] = msg['idd'];
+					// obj['idd'] = msg['idd'];
 					if(msg['type'] == 'image'){
 						obj['stepNo'] = stepNo++;
 						obj['data'] = msg['data'];
@@ -364,7 +364,7 @@ async function getc(req, res){
 					}else{
 						_.each(msg['data'], function(msgData){
 								obj['stepNo'] = stepNo++;
-								obj['idd'] = msgData['idd'];
+								// obj['idd'] = msgData['idd'];
 								obj['text'] = msgData['text'];
 								obj['url'] = msgData['url'];
 								obj['fName'] = msgData['fName'];
@@ -383,22 +383,15 @@ async function getc(req, res){
 
 async function putc(req, res){
 	try{
-		_.each(req.body, async function(v){
-			try{
-				var collection = await MDLcontacts.findOne({'contactNumber':v['contactNumber']}).exec();
-				if(collection == null){
-					await new MDLcontacts(v).save();
-				}
-				else{
-					await MDLcontacts.deleteOne({'contactNumber':v['contactNumber']}).exec();
-					
-				}
-			}catch(E_){
-				console.log(E_)
-			}
-		})
+		await MDLcontacts.deleteMany({}).exec();
+		_.each(req.body, async function(contact){
+			var contactModel = new MDLcontacts(contact);
+			console.log(contact)
+			await contactModel.save();
+		});
 		res.json('yess')
 	}catch(E_){
+		console.log(E_)
 		res.json('Error')
 	}
 }

@@ -87,20 +87,26 @@ global.msg_s_w=`<span class="fa-stack">
                 </span>`;
 var ifStopSendingMsg = false;
 var currentMsgRow = 0;
-global.contactObject = {"stepNo":100001,//"stepCheckBox":'<input type="checkbox" class="c_select" />',
+global.contactObjectText = {/*"stepNo":100001,*///"stepCheckBox":'<input type="checkbox" class="c_select" />',
                         "contactName":"__BLANK__","contactNumber":"",
-                        "type": "",
-                        "idd": 0,
+                        "type": "text",
+                        // "idd": 0,
                         "text": "",
                         "delta": "",
                         "url": "",
                         "fName": "",
+                        };
+global.contactObjectImage = {/*"stepNo":100001,*///"stepCheckBox":'<input type="checkbox" class="c_select" />',
+                        "contactName":"__BLANK__","contactNumber":"",
+                        type : "image",
                         "data": [{
-                            "text": "",
-                            "delta": "",
-                            "url": "",
-                            "fName": ""
+                            // idd : "",
+                            delta : "",
+                            url : "",
+                            text : "",
+                            fName :  ""
                         }]};
+                                               
 global.copyMessageData = {};
 global.editRecordData = {};
 $(window).on("beforeunload", function() { 
@@ -367,20 +373,20 @@ function declareFunctions(){
       if(cNumber.match(/^[6-9]\d{9}$/g) != null){
           if(cName == "") cName = "__BLANK__";
           if($('#messageType').val() == 'image'){
-              var contactData = _.clone(global.contactObject);
+              var contactData = _.clone(global.contactObjectImage);
               contactData['contactName'] = cName;
               contactData['contactNumber'] = cNumber;
-              contactData['stepNo'] = global.editRecordData.stepNo;
-              contactData['type'] = global.editRecordData.type;
-              contactData['idd'] = global.editRecordData.idd;
+              // contactData['stepNo'] = global.editRecordData.stepNo;
+              // contactData['messsage']['type'] = $("#messageType").val();
+              // contactData['messsage']['idd'] = global.editRecordData.idd;
               contactData['data'] = global.editRecordData.data;
           }else{
               var msg = global.parseMessage(global.quillMessage);
-              var contactData = _.clone(global.contactObject);
+              var contactData = _.clone(global.contactObjectText);
               contactData['contactName'] = cName;
               contactData['contactNumber'] = cNumber;
-              contactData['data'][0]['text'] = msg.text;
-              contactData['data'][0]['delta'] = msg.delta;
+              contactData['text'] = msg.text;
+              contactData['delta'] = msg.delta;
 
           }
           global.addChangeContact(global.dtap.cntDt,contactData)
@@ -397,16 +403,20 @@ function declareFunctions(){
         var current_row = parseInt($row.find('td:nth-child(1)').text());
         if(global.cRecord.isEdit){
             var data = global.dtap.cntDt.row(current_row-1).data()
-            data['contactName'] = newData['contactName'];
-            data['contactNumber'] = newData['contactNumber'];
-            data['stepNo'] = newData['stepNo'];
-            data['type'] = newData['type'];
-            data['idd'] = newData['idd'];
+            // data['contactName'] = newData['contactName'];
+            // data['contactNumber'] = newData['contactNumber'];
+            // data['stepNo'] = newData['stepNo'];
+            // data['type'] = newData['type'];
+            // data['idd'] = data['idd'];
+            // newData['idd'] = data['idd'];
+            if(data.type)
+            // newData['messsage']['idd'] = data.idd;
+            data = newData;
             if(data['type'] == 'image'){
-                data['data'] = newData['data'];
+                // data['data'] = newData['data'];
             }else{
-                data['data'][0]['text'] = newData['data'][0]['text'];
-                data['data'][0]['delta'] = newData['data'][0]['delta'];
+                // data['text'] = newData['text'];
+                // data['delta'] = newData['delta'];
             }
 
             global.dtap.cntDt.row(current_row-1).data(data)
@@ -455,7 +465,7 @@ function declareFunctions(){
                     </div>`)
             });
         }else if(data['type'] == 'text'){
-            global.quillMessage.setContents(JSON.parse(data['data'][0]['delta']))
+            global.quillMessage.setContents(JSON.parse(data['delta']))
         }
     }
 
@@ -495,11 +505,35 @@ function declareFunctions(){
     }
 
     global.saveContacts = function(){
+        var dt = global.dtob.cntDt.fnGetData();
+        var mainObjArray = [];
+        _.each(_.uniq(dt,'contactNumber'), function(uniqContact){
+            var mainObj = {}
+            var allDataOfCurCon = _.filter(dt,function(v){if(v.contactNumber == uniqContact.contactNumber) return v})
+            mainObj.contactName = uniqContact.contactName
+            mainObj.contactNumber = uniqContact.contactNumber
+            mainObj.message = [];
+            _.each(allDataOfCurCon, function(eachCon){
+        //         console.log(eachCon)
+                if(eachCon.type == 'text'){
+                    var dataObjArr = [{/*idd : eachCon.idd, */text : eachCon.text, url : eachCon.url, fName : eachCon.fName, delta : eachCon.delta}];
+                    mainObj.message.push({type:eachCon.type, data : dataObjArr})
+                }else{
+                    
+                    mainObj.message.push({type:eachCon.type/*, idd : eachCon.idd*/, data : eachCon.data})
+                }
+
+            })
+            mainObjArray.push(mainObj)
+
+        })
+
+        // console.log(JSON.stringify(mainObjArray))
         $.ajax({
           type: "PUT",
           "async" : false,
           url: `${global.apiurl}putc`,
-          data: JSON.stringify(global.dtob.cntDt.fnGetData()),
+          data: JSON.stringify(mainObjArray),
           complete : function(jqXHR, textStatus){
             if(textStatus == "success"){
                 global.refreshCntDt();
@@ -636,7 +670,7 @@ function declareFunctions(){
     if(global.parseContactNosRawData()){
         $(".addContactMultipleModal").modal('toggle')
         $.each($("#contactNosRawData").val().split("\n"), function(k,v){
-            var contactData = _.clone(global.contactObject);
+            var contactData = _.clone(global.contactObjectText);
             contactData['contactNumber'] = v;
             global.dtap.cntDt.row.add(contactData)
         })
@@ -650,7 +684,8 @@ function declareFunctions(){
         $(".textTypeDiv").show();
     }   
     if(this.value == 'image'){
-        $('.grid').contents(':not(.imgHolderPlus)').remove();
+        $('.gridSmall').contents(':not(.imgHolderPlus)').remove();
+        global.imgCaptionMessage.setText("");
         $(".imageTypeDiv").show();
     }
     if(this.value == 'audio'){
@@ -709,7 +744,7 @@ function declareFunctions(){
                         <a href="#" class="delImage">x</a>
                     </div>
                 </div>`)
-            if(_.isEmpty(global.editRecordData))
+            if(_.isEmpty(global.editRecordData.data))
                 global.editRecordData = {data:[]};
             global.editRecordData.data.push({text:'',delta:'',fName:data.title,url:'http://localhost:4001/api/serve?res=thumbnail/'+data.title})
        })
@@ -1105,8 +1140,8 @@ global.initContactsTable = function(json){
         ],
         // columns : _.map(clmns, function(v){return( {data : v,title : v.split('_')[1]})}),
         columnDefs: [
-        {"className": "dt-center", "targets": [0,1]},
-        {"type" : 'html', render: $.fn.dataTable.render.ellipsis(190,true,false),'targets' : 4}],
+        {"className": "dt-center", "targets": [0]},
+        {"type" : 'html', render: $.fn.dataTable.render.ellipsis(190,true,false),'targets' : 3}],
         bInfo : false,
         pagination : false,
         bPaginate : false,
@@ -1115,9 +1150,9 @@ global.initContactsTable = function(json){
         scroller: true,
         rowCallback: function( row, data ) {
             if(data.type == 'image'){
-                $(row).find('td:nth-child(5)').empty();
+                $(row).find('td:nth-child(4)').empty();
                 $.each(data.data, function(k,v){
-                    $(row).find('td:nth-child(5)').append('<img src="'+v.url+'"/>')
+                    $(row).find('td:nth-child(4)').append('<img src="'+v.url+'"/>')
                 })
             }
         }
@@ -1151,7 +1186,7 @@ global.parseMessage = function(quillObj){
   var data = quillObj.getContents().ops;
   var finalText = ""
   _.map(data, function(v){
-       var txt = v.insert;
+       var txt = v.insert;var temp;
        if(!_.isEmpty(_.pick(v.attributes,'bold'))){
            var spaceAtStart = txt.search(/\S|$/);temp=txt.split("").reverse().join("");
            var spaceAtSEnd = temp.search(/\S|$/) == 0? 1 : temp.search(/\S|$/);

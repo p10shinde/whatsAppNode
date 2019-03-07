@@ -6,18 +6,18 @@ var messageDataSchema = new mongoose.Schema({
    text: String,
    delta: String,
    url: String,
-   idd: Number,
+   // idd: Number,
    fName: String 
 }, { _id : false, __v: false })
 
 var messageSchema = new mongoose.Schema({
    type: String,
-   idd: Number,
+   // idd: Number,
    data : [messageDataSchema],
    
 }, { _id : false, __v: false })
 var contactSchema = new mongoose.Schema({
-   stepNo: Number,
+   // stepNo: Number,
    stepCheckBox: String,
    contactName: String,
    contactNumber: String,
@@ -27,7 +27,7 @@ var contactSchema = new mongoose.Schema({
                
 
 
-contactSchema.index({contactNumber: 1, text: 1}, {unique: true});
+contactSchema.index({contactNumber: 1}, {unique: true});
 
 contactSchema.plugin(mongooseHidden);
 contactSchema.plugin(beautifyUnique); 
