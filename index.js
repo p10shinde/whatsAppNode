@@ -87,10 +87,10 @@ global.msg_s_w=`<span class="fa-stack">
                 </span>`;
 var ifStopSendingMsg = false;
 var currentMsgRow = 0;
-global.contactObject = {"stepNo":100001,"stepCheckBox":'<input type="checkbox" class="c_select" />',
+global.contactObject = {"stepNo":100001,//"stepCheckBox":'<input type="checkbox" class="c_select" />',
                         "contactName":"__BLANK__","contactNumber":"",
                         "type": "",
-                        "id": 0,
+                        "idd": 0,
                         "text": "",
                         "delta": "",
                         "url": "",
@@ -372,7 +372,7 @@ function declareFunctions(){
               contactData['contactNumber'] = cNumber;
               contactData['stepNo'] = global.editRecordData.stepNo;
               contactData['type'] = global.editRecordData.type;
-              contactData['id'] = global.editRecordData.id;
+              contactData['idd'] = global.editRecordData.idd;
               contactData['data'] = global.editRecordData.data;
           }else{
               var msg = global.parseMessage(global.quillMessage);
@@ -401,7 +401,7 @@ function declareFunctions(){
             data['contactNumber'] = newData['contactNumber'];
             data['stepNo'] = newData['stepNo'];
             data['type'] = newData['type'];
-            data['id'] = newData['id'];
+            data['idd'] = newData['idd'];
             if(data['type'] == 'image'){
                 data['data'] = newData['data'];
             }else{
@@ -1099,7 +1099,6 @@ global.initContactsTable = function(json){
         data : json,
         columns: [
             { "data": "stepNo"},
-            { "data": "stepCheckBox" },
             { "data": "contactName" },
             { "data": "contactNumber" },
             { "data": "text"}

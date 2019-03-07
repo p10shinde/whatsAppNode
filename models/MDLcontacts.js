@@ -6,12 +6,13 @@ var messageDataSchema = new mongoose.Schema({
    text: String,
    delta: String,
    url: String,
+   idd: Number,
    fName: String 
 }, { _id : false, __v: false })
 
 var messageSchema = new mongoose.Schema({
    type: String,
-   id: Number,
+   idd: Number,
    data : [messageDataSchema],
    
 }, { _id : false, __v: false })

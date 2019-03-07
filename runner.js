@@ -353,10 +353,10 @@ async function getc(req, res){
 			_.each(v['message'], function(msg){
 					var obj = {}
 					
-					obj['stepCheckBox'] = v['stepCheckBox'];obj['contactName'] = v['contactName'];obj['contactNumber'] = v['contactNumber'];
+					obj['contactName'] = v['contactName'];obj['contactNumber'] = v['contactNumber'];
 					
 					obj['type'] = msg['type'];
-					obj['id'] = msg['id'];
+					obj['idd'] = msg['idd'];
 					if(msg['type'] == 'image'){
 						obj['stepNo'] = stepNo++;
 						obj['data'] = msg['data'];
@@ -364,7 +364,7 @@ async function getc(req, res){
 					}else{
 						_.each(msg['data'], function(msgData){
 								obj['stepNo'] = stepNo++;
-								obj['id'] = msg['id'];
+								obj['idd'] = msgData['idd'];
 								obj['text'] = msgData['text'];
 								obj['url'] = msgData['url'];
 								obj['fName'] = msgData['fName'];
@@ -410,7 +410,7 @@ async function delc(req, res){
 				var list = await MDLcontacts.find({'contactNumber':v['contactNumber']}).exec();
 				var list2 = _.map(list, function(contactDetails){
 				    var f_message = _.filter(contactDetails.message, function(msg){
-				        if(msg.id != v['id']) return msg;
+				        if(msg.idd != v['idd']) return msg;
 				    })
 				    contactDetails.message = f_message;
 				    return contactDetails
