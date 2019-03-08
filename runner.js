@@ -527,22 +527,41 @@ async function getcontactdata(req,res){
 
 async function sendmessage(req, res){
 	try{
-		console.log(req.body)
 		if(page == null) res.status(500).json({'Error' : 'Not connected.'})
 		else{
 			//remove html entities .replace(/<\/?[^>]+(>|$)/g, "")
+			if(req.body.type == 'text'){
 
-   //          req.body['m_Message'] =  req.body['m_Message'].replace(/<b>/g, "*").replace(/<\/b>/g,"*").
-			// 			      replace(/<strike>/g, "~").replace(/<\/strike>/g,"~").
-			// 			      replace(/<i>/g, "_").replace(/<\/i>/g,"_").
-			// 			      replace(/<tt>/g, "```").replace(/<\/tt>/g,"```");
-	  //     	req.body['m_Message'] = req.body['m_Message'].replace(/{#name#}/g,req.body['c_Name'] != '__BLANK__' ? req.body['c_Name'] : 'User');
-	  //     	req.body['m_Message'] = req.body['m_Message'].replace(/<\/?[^>]+(>|$)/g, "")
-	  //     	req.body['m_Message'] = urlencode(req.body['m_Message'])
-			// await page.goto(ctcURL.replace('##__NUMBER__##',`91${req.body['c_Number']}`).replace('##__TEXT__##',req.body['m_Message']), { waitUntil: 'networkidle2',timeout: 0 });
-			// await page.click('#action-button');
-			// await page.waitForSelector('._35EW6',{ timeout: global.timeout }).then(async () => {console.log('send button found...');/*await page.click('._35EW6');*/})
-			// await page.keyboard.press('Enter');
+	            req.body['text'] =  req.body['text'].replace(/<b>/g, "*").replace(/<\/b>/g,"*").
+							      replace(/<strike>/g, "~").replace(/<\/strike>/g,"~").
+							      replace(/<i>/g, "_").replace(/<\/i>/g,"_").
+							      replace(/<tt>/g, "```").replace(/<\/tt>/g,"```");
+		      	req.body['text'] = req.body['text'].replace(/{#name#}/g,req.body['contactName'] != '__BLANK__' ? req.body['contactName'] : 'User');
+		      	req.body['text'] = req.body['text'].replace(/<\/?[^>]+(>|$)/g, "")
+		      	req.body['text'] = urlencode(req.body['text'])
+				await page.goto(ctcURL.replace('##__NUMBER__##',`91${req.body['contactNumber']}`).replace('##__TEXT__##',req.body['text']), { waitUntil: 'networkidle2',timeout: 0 });
+				await page.click('#action-button');
+				await page.waitForSelector('._35EW6',{ timeout: global.timeout }).then(async () => {console.log('send button found...');/*await page.click('._35EW6');*/})
+				await page.keyboard.press('Enter');
+			}else if(req.body.type == 'image'){
+				await page.goto(ctcURL.replace('##__NUMBER__##',`91${req.body['contactNumber']}`).replace('##__TEXT__##',''), { waitUntil: 'networkidle2',timeout: 0 });
+				await page.click('#action-button');
+				await page.waitForSelector("div[title='Attach']",{ timeout: global.timeout }).then(async () => {console.log('attach button found...');/*await page.click('._35EW6');*/})
+				await page.waitFor(5000);
+				await page.click("div[title='Attach']");
+
+				// await page.waitForSelector("ul li:nth-child(1) input[type='file']",{ timeout: 3000 }).then(async () => {console.log('input button found...');/*await page.click('._35EW6');*/})
+				
+				await page.evaluate( function(){
+			      document.querySelectorAll("ul li:nth-child(1) input[type='file']")[0].style.display = 'block'
+			   });
+			   const imageInput = await page.$("ul li:nth-child(1) input[type='file']");
+   			await imageInput.uploadFile(path.join(__dirname, 'data/i/pp.png'));
+			   // await page.type("input[type='file']", global.imageurl + '/pp.png');
+				await page.waitForSelector("span[data-icon='send-light']",{ timeout: global.timeout }).then(async () => {console.log('send button found...');/*await page.click('._35EW6');*/})
+				await page.waitFor(2000);
+				await page.click("span[data-icon='send-light']");
+			}
 
 			// await page.waitForSelector('._32uRw>span[data-icon="msg-check"]:last-child',{ timeout: global.timeout }).then(() => console.log('message sent...'))
 			// await page.waitFor(2000);

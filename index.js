@@ -1059,9 +1059,8 @@ global.postMessage = function(data){
     $("#sendMessages").prop('disabled',true);
     $("#refreshMessages").prop('disabled',true);
     data = currentMessageSendingData[0];
-    var rowno = data['stepNo']-1;
-    var maxrowno = global.dtob.msgsDt.fnGetData().length
-    global.dtap.msgsDt.cell(rowno,6).data(global.msg_s_i);
+    var rowno = data['stepNo'] - 1;
+    global.dtap.msgsDt.cell(rowno,4).data(global.msg_s_i);
 
     $.ajax({
         url : `${global.apiurl}sendmessage`,
@@ -1070,10 +1069,10 @@ global.postMessage = function(data){
         data : JSON.stringify(data),
         complete : function(jqXHR, status){
             if(status == "success"){
-                global.dtap.msgsDt.cell(rowno,6).data(global.msg_s_s);
-                var cData = global.getSelectedRowsData()[currentMsgRow];currentMsgRow++;
-                currentMessageSendingData.unshift();
-                if(!_.isUndefined(cData)){
+                global.dtap.msgsDt.cell(rowno,4).data(global.msg_s_s);
+                // var cData = global.getSelectedRowsData()[currentMsgRow];currentMsgRow++;
+                currentMessageSendingData.shift();
+                if(!_.isEmpty(currentMessageSendingData)){
                     setTimeout(function(){
                         global.postMessage(currentMessageSendingData)
                     },2000)
@@ -1082,19 +1081,20 @@ global.postMessage = function(data){
             }else if(status == "error"){
                 if(jqXHR.status == 500){
                     var cData = global.getSelectedRowsData();
-                    $.map(cData, function(v){
-                        global.dtap.msgsDt.cell(v['stepNo']-1,6).data(global.msg_s_f);
+                    $.map(currentMessageSendingData, function(v){
+                        global.dtap.msgsDt.cell(v['stepNo']-1,4).data(global.msg_s_f);
                     }) 
                     currentMsgRow = 0;
                    $("#sendMessages").prop('disabled',false);
                    $("#refreshMessages").prop('disabled',false);
                     $.notify(jqXHR.responseJSON,'error')
                 }else{
-                    global.dtap.msgsDt.cell(rowno,6).data(global.msg_s_f);
-                    var cData = global.getSelectedRowsData()[currentMsgRow];currentMsgRow++;
-                    if(!_.isUndefined(cData)){
+                    global.dtap.msgsDt.cell(rowno,4).data(global.msg_s_f);
+                    // var cData = global.getSelectedRowsData()[currentMsgRow];currentMsgRow++;
+                    currentMessageSendingData.shift();
+                    if(!_.isEmpty(currentMessageSendingData)){
                         setTimeout(function(){
-                            global.postMessage(cData)
+                            global.postMessage(currentMessageSendingData)
                         },2000)
                         $.notify(jqXHR.responseJSON,'error')
                     }else{
