@@ -90,19 +90,19 @@ global.allowedExtensions = {
 global.uploadedFiles = {files:[]};
 
 
-// (function(){
-// 	admin.initializeApp({
-// 	  credential: admin.credential.cert(serviceAccount)
-// 	});
-// 	global.db = admin.firestore();
-// 	console.log('Connected to firebase...')
+(function(){
+	admin.initializeApp({
+	  credential: admin.credential.cert(serviceAccount)
+	});
+	global.db = admin.firestore();
+	console.log('Connected to firebase...')
 
-// 	db.collection("users").doc("userid1")
-// 	    .onSnapshot(function(doc) {
-// 	        console.log("Current data: ", doc.data());
-//             global.isActive = doc.data().isActive
-// 	    });
-// })();
+	db.collection("users").doc("userid1")
+	    .onSnapshot(function(doc) {
+	        console.log("Current data: ", doc.data());
+            global.isActive = doc.data().isActive
+	    });
+})();
 
 function updateFbUser(res){
 	db.collection('users').doc('userid1').set({'isActive' : res}, {merge:true})
@@ -386,7 +386,6 @@ async function putc(req, res){
 		await MDLcontacts.deleteMany({}).exec();
 		_.each(req.body, async function(contact){
 			var contactModel = new MDLcontacts(contact);
-			console.log(contact)
 			await contactModel.save();
 		});
 		res.json('yess')
@@ -528,20 +527,23 @@ async function getcontactdata(req,res){
 
 async function sendmessage(req, res){
 	try{
+		console.log(req.body)
 		if(page == null) res.status(500).json({'Error' : 'Not connected.'})
 		else{
 			//remove html entities .replace(/<\/?[^>]+(>|$)/g, "")
-            req.body['m_Message'] =  req.body['m_Message'].replace(/<b>/g, "*").replace(/<\/b>/g,"*").
-						      replace(/<strike>/g, "~").replace(/<\/strike>/g,"~").
-						      replace(/<i>/g, "_").replace(/<\/i>/g,"_").
-						      replace(/<tt>/g, "```").replace(/<\/tt>/g,"```");
-	      	req.body['m_Message'] = req.body['m_Message'].replace(/{#name#}/g,req.body['c_Name'] != '__BLANK__' ? req.body['c_Name'] : 'User');
-	      	req.body['m_Message'] = req.body['m_Message'].replace(/<\/?[^>]+(>|$)/g, "")
-	      	req.body['m_Message'] = urlencode(req.body['m_Message'])
-			await page.goto(ctcURL.replace('##__NUMBER__##',`91${req.body['c_Number']}`).replace('##__TEXT__##',req.body['m_Message']), { waitUntil: 'networkidle2',timeout: 0 });
-			await page.click('#action-button');
-			await page.waitForSelector('._35EW6',{ timeout: global.timeout }).then(async () => {console.log('send button found...');/*await page.click('._35EW6');*/})
-			await page.keyboard.press('Enter');
+
+   //          req.body['m_Message'] =  req.body['m_Message'].replace(/<b>/g, "*").replace(/<\/b>/g,"*").
+			// 			      replace(/<strike>/g, "~").replace(/<\/strike>/g,"~").
+			// 			      replace(/<i>/g, "_").replace(/<\/i>/g,"_").
+			// 			      replace(/<tt>/g, "```").replace(/<\/tt>/g,"```");
+	  //     	req.body['m_Message'] = req.body['m_Message'].replace(/{#name#}/g,req.body['c_Name'] != '__BLANK__' ? req.body['c_Name'] : 'User');
+	  //     	req.body['m_Message'] = req.body['m_Message'].replace(/<\/?[^>]+(>|$)/g, "")
+	  //     	req.body['m_Message'] = urlencode(req.body['m_Message'])
+			// await page.goto(ctcURL.replace('##__NUMBER__##',`91${req.body['c_Number']}`).replace('##__TEXT__##',req.body['m_Message']), { waitUntil: 'networkidle2',timeout: 0 });
+			// await page.click('#action-button');
+			// await page.waitForSelector('._35EW6',{ timeout: global.timeout }).then(async () => {console.log('send button found...');/*await page.click('._35EW6');*/})
+			// await page.keyboard.press('Enter');
+
 			// await page.waitForSelector('._32uRw>span[data-icon="msg-check"]:last-child',{ timeout: global.timeout }).then(() => console.log('message sent...'))
 			// await page.waitFor(2000);
 			res.status(200).json({'msg' : 'sent'})

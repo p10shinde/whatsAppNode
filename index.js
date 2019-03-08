@@ -78,6 +78,10 @@ $.fn.dataTable.ext.errMode = 'none';
 var isLoggedIn = false, isLI;
 global.dtob = {};
 global.dtap = {};
+global.msg_s_default = `<span class="fa-stack">
+                          <i class="fas fa-circle fa-stack-2x"></i>
+                          <i class="fas fa-ellipsis-h fa-stack-1x fa-inverse"></i>
+                      </span>`;
 global.msg_s_i = `<i class='fas fa-redo fa-spin text-info'></i>`;
 global.msg_s_s = `<i class='fas fa-check-circle text-success'></i>`;
 global.msg_s_f = `<i class='fas fa-times-circle text-danger'></i>`;
@@ -87,6 +91,7 @@ global.msg_s_w=`<span class="fa-stack">
                 </span>`;
 var ifStopSendingMsg = false;
 var currentMsgRow = 0;
+var currentMessageSendingData = [];
 global.contactObjectText = {/*"stepNo":100001,*///"stepCheckBox":'<input type="checkbox" class="c_select" />',
                         "contactName":"__BLANK__","contactNumber":"",
                         "type": "text",
@@ -135,6 +140,7 @@ window.onload = function(){
     $(".messageEditorModal button#modalSubmitModifyConatct").on('click',global.modalSubmitModifyConatct)
     $(".menubar .btn:not(#sessionStatus)").on('click',global.addActiveClass);
     $('#manageContactsDataTable').on('click', 'tbody tr', global.multipleSelectRowHandling);
+    $('#sendMessagesDataTable').on('click', 'tbody tr', global.multipleSelectRowHandling);
 
     $('#contactNosRawData').on('input.propertychange', global.checkCharLength);
     $('#addMultipleContacts').on('click', global.addMultipleContacts);
@@ -358,9 +364,10 @@ function declareFunctions(){
 
     global.sendMessage = function(){
         currentMsgRow = 0;
-        var cData = global.getSelectedRowsData()[currentMsgRow];currentMsgRow++;
-        if(!_.isUndefined(cData)){
-            global.postMessage(cData)
+        // var cData = global.getSelectedRowsData()[currentMsgRow];currentMsgRow++;
+        currentMessageSendingData = global.dtap.msgsDt.rows('.highlightContact').data().to$().toArray();
+        if(!_.isUndefined(currentMessageSendingData)){
+            global.postMessage(currentMessageSendingData)
         }else{
             $("#sendMessages").prop('disabled',false);
             $("#refreshMessages").prop('disabled',false);
@@ -596,7 +603,7 @@ function declareFunctions(){
 
             if(event.ctrlKey === false) {
                 $row.siblings().removeClass("highlightContact");
-                $row.addClass("highlightContact");
+                // $row.addClass("highlightContact");
             }else if(event.ctrlKey && !event.shiftKey){
 
               $row.toggleClass("highlightContact");
@@ -1051,6 +1058,7 @@ global.getSelectedRowsData = function(){
 global.postMessage = function(data){
     $("#sendMessages").prop('disabled',true);
     $("#refreshMessages").prop('disabled',true);
+    data = currentMessageSendingData[0];
     var rowno = data['stepNo']-1;
     var maxrowno = global.dtob.msgsDt.fnGetData().length
     global.dtap.msgsDt.cell(rowno,6).data(global.msg_s_i);
@@ -1064,9 +1072,10 @@ global.postMessage = function(data){
             if(status == "success"){
                 global.dtap.msgsDt.cell(rowno,6).data(global.msg_s_s);
                 var cData = global.getSelectedRowsData()[currentMsgRow];currentMsgRow++;
+                currentMessageSendingData.unshift();
                 if(!_.isUndefined(cData)){
                     setTimeout(function(){
-                        global.postMessage(cData)
+                        global.postMessage(currentMessageSendingData)
                     },2000)
                 }else{$("#sendMessages").prop('disabled',false);$("#refreshMessages").prop('disabled',false);}
                 $.notify(jqXHR.responseJSON.msg,'success')
@@ -1107,19 +1116,39 @@ global.initMessagesTable = function(json){
     $("#refreshMessages").prop('disabled',false);
     $("#selectAllExcel").removeClass('d-none');
     $("#selectNoneExcel").removeClass('d-none');
-    var clmns = _.keys(json[0]);clmns.splice(-1);
+    // var clmns = _.keys(json[0]);clmns.splice(-1);
     global.dtap.msgsDt =  $("#sendMessagesDataTable").DataTable({
         data : json,
-        columns : _.map(clmns, function(v){return( {data : v,title : v.split('_')[1]})}),
-        columnDefs: [{"className": "dt-center", "targets": [0,1,6]},{"type" : 'html',
-            render: $.fn.dataTable.render.ellipsis(190,true,false),
-        'targets' : 4}],
+        columns: [
+            { "data": "stepNo"},
+            { "data": "contactName" },
+            { "data": "contactNumber" },
+            { "data": "text"},
+            { "data": "", "defaultContent": global.msg_s_default}
+        ],
+        // columns : _.map(clmns, function(v){return( {data : v,title : v.split('_')[1]})}),
+        // columnDefs: [{"className": "dt-center", "targets": [0,1,6]},{"type" : 'html',
+        //     render: $.fn.dataTable.render.ellipsis(190,true,false),
+        // 'targets' : 4}],
+        columnDefs: [
+        {"className": "dt-center", "targets": [0]},
+        {"type" : 'html', render: $.fn.dataTable.render.ellipsis(190,true,false),'targets' : 3}],
         bInfo : false,
         pagination : false,
         bPaginate : false,
         stateSave: true,
         scrollY : "450px",
-        scroller: true
+        scroller: true,
+        rowCallback: function( row, data ) {
+            if(data.type == 'image'){
+                $(row).find('td:nth-child(4)').empty();
+                $.each(data.data, function(k,v){
+                    $(row).find('td:nth-child(4)').append('<img src="'+v.url+'"/>')
+                })
+            }
+
+
+        }
     });
     global.dtob.msgsDt = $("#sendMessagesDataTable").dataTable()
     global.dtap.msgsDt.columns.adjust().draw();
